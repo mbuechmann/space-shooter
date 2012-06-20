@@ -1,0 +1,31 @@
+package net.littlecoder.core;
+
+import static playn.core.PlayN.*;
+
+import playn.core.Game;
+import playn.core.Surface;
+import playn.core.SurfaceLayer;
+
+public class SpaceShooterGame implements Game {
+    @Override
+    public void init() {
+	// create and add background image layer
+	//Image bgImage = assets().getImage("images/bg.png");
+	//ImageLayer bgLayer = graphics().createImageLayer(bgImage);
+	//graphics().rootLayer().add(bgLayer);
+    }
+
+    @Override
+    public void paint(float alpha) {
+    }
+
+    @Override
+    public void update(float delta) {
+    }
+
+    @Override
+    public int updateRate() {
+	return 60;
+    }
+
+}

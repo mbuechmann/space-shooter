@@ -1,0 +1,12 @@
+package net.littlecoder.core;
+
+import playn.core.Surface;
+
+class Ship {
+    
+    public Ship (float x, float y) {
+	this.x = x;
+	this.y = y
+    }
+
+}
