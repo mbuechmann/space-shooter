@@ -16,14 +16,16 @@ class Line {
 	surface.drawLine(p0.x(), p0.y(), p1.x(), p1.y(), 1f);
     }
 
-    // TODO: Optimize memory usage
-    public Line rotate(float angle) {
-	return new Line(p0.rotate(angle), p1.rotate(angle));
+    public Line setRotation(float angle) {
+	p0.setRotation(angle);
+	p1.setRotation(angle);
+	return this;
     }
 
-    // TODO: Optimize memory usage
-    public Line translate(float x, float y) {
-	return new Line(p0.translate(x, y), p1.translate(x, y));
+    public Line setTranslation(float x, float y) {
+	p0.setTranslation(x, y);
+	p1.setTranslation(x, y);
+	return this;
     }
 
 }

@@ -55,7 +55,7 @@ class Ship {
 	surface.setFillColor(0xFFFFFF);
 
 	for (Line l : lines)
-	    l.rotate(rot).translate(x, y).paint(surface);
+	    l.setRotation(rot).setTranslation(x, y).paint(surface);
     }
 
     public void accelerate(boolean on) {

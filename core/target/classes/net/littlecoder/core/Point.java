@@ -2,37 +2,61 @@ package net.littlecoder.core;
 
 class Point {
     
-    private float x;
-    private float y;
+    private float originalX;
+    private float originalY;
+    private float currentX;
+    private float currentY;
+
+    private float rotation;
+    private float translationX;
+    private float translationY;
+    private boolean dirty;
 
     public Point(float x, float y) {
-	this.x = x;
-	this.y = y;
+	originalX = x;
+	originalY = y;
+	currentX = x;
+	currentY = y;
+
+	rotation = 0f;
+	translationX = 0f;
+	translationY = 0f;
+	dirty = false;
     }
 
-    // TODO: Optimize memory usage
-    public Point rotate(float angle) {
-	// TODO: Does this work?
-	float newX = (float)(Math.cos(angle) * x) + (float)(Math.sin(angle) * y);
-	float newY = -(float)(Math.sin(angle) * x) + (float)(Math.cos(angle) * y);
+    public Point setRotation(float angle) {
+	dirty = true;
+	rotation = angle;
 
-	return new Point(newX, newY);
+	return this;
     }
 
-    // TODO: Optimize memory usage
-    public Point translate(float x, float y) {
-	float newX = this.x + x;
-	float newY = this.y + y;
+    public Point setTranslation(float x, float y) {
+	dirty = true;
+	translationX = x;
+	translationY = y;
 
-	return new Point(newX, newY);
+	return this;
     }
 
     public float x() {
-	return x;
+	if (dirty)
+	    recalc();
+	return currentX;
     }
 
     public float y() {
-	return y;
+	if (dirty)
+	    recalc();
+	return currentY;
+    }
+
+    private void recalc() {
+	dirty = false;
+	currentX = (float)(Math.cos(rotation) * originalX) + (float)(Math.sin(rotation) * originalY);
+	currentY = -(float)(Math.sin(rotation) * originalX) + (float)(Math.cos(rotation) * originalY);
+	currentX += translationX;
+	currentY += translationY;
     }
 
 }
