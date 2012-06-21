@@ -9,7 +9,7 @@ import playn.core.SurfaceLayer;
 public class SpaceShooterGame implements Game {
 
     private static final int WIDTH = 800;
-    private static final int HEIGHT = 480;
+    private static final int HEIGHT = 800;
 
     private Surface surface;
 
@@ -27,6 +27,8 @@ public class SpaceShooterGame implements Game {
 	graphics().rootLayer().add(surfaceLayer);
 
 	ship = new Ship(WIDTH, HEIGHT);
+
+	keyboard().setListener(new ShipKeyboardListener(ship));
     }
 
     @Override
@@ -38,7 +40,6 @@ public class SpaceShooterGame implements Game {
 
     @Override
     public void update(float delta) {
-	ship.accelerate(delta);
 	ship.update(delta);
     }
 

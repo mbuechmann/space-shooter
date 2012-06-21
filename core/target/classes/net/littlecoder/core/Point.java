@@ -14,7 +14,7 @@ class Point {
     public Point rotate(float angle) {
 	// TODO: Does this work?
 	float newX = (float)(Math.cos(angle) * x) + (float)(Math.sin(angle) * y);
-	float newY = (float)(Math.sin(angle) * x) + (float)(Math.cos(angle) * y);
+	float newY = -(float)(Math.sin(angle) * x) + (float)(Math.cos(angle) * y);
 
 	return new Point(newX, newY);
     }
