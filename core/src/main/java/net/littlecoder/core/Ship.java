@@ -2,10 +2,6 @@ package net.littlecoder.core;
 
 import playn.core.Surface;
 
-/*
-  TODO: Change numbers to use milliseconds and speed in pixels per second
- */
-
 class Ship {
 
     // Speed in pixel/second,
