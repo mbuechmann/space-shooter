@@ -62,6 +62,8 @@ class GameHandler implements Keyboard.Listener {
 	    ship.steerLeft(true);
 	if (event.key() == Key.SPACE)
 	    shooting = true;
+	if (event.key() == Key.ESCAPE)
+	    System.exit(0);
     }
 
     public void onKeyUp(Keyboard.Event event) {
