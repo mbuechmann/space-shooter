@@ -66,7 +66,7 @@ class Ship {
 	return surface;
     }
 
-    public void paint(Surface surface) {
+    public void paint(float alpha) {
 	surface.setFillColor(0xFFFFFF);
 
 	for (Line l : lines)

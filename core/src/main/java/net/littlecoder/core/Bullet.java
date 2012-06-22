@@ -42,7 +42,7 @@ class Bullet {
 	age += delta;
     }
 
-    public void paint(Surface surface) {
+    public void paint(float alpha) {
 	surface.fillRect(x, y, 2f, 2f);
     }
 

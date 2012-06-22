@@ -27,12 +27,12 @@ class GameHandler implements Keyboard.Listener {
     public void paint(float alpha) {
 	surface.clear();
 
-	ship.paint(surface);
+	ship.paint(alpha);
 
 	Iterator i = bullets.iterator();
 	while (i.hasNext()) {
 	    Bullet b = (Bullet)i.next();
-	    b.paint(surface);
+	    b.paint(alpha);
 	}
     }
 
