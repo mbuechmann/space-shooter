@@ -10,10 +10,9 @@ public class SpaceShooterGame implements Game {
 
     private static final int WIDTH = 800;
     private static final int HEIGHT = 800;
-
     private Surface surface;
 
-    private Ship ship;
+    private GameHandler gameHandler;
 
     @Override
     public void init() {
@@ -26,21 +25,17 @@ public class SpaceShooterGame implements Game {
 	surface = surfaceLayer.surface();
 	graphics().rootLayer().add(surfaceLayer);
 
-	ship = new Ship(WIDTH, HEIGHT);
-
-	keyboard().setListener(new ShipKeyboardListener(ship));
+	gameHandler = new GameHandler(surface);
     }
 
     @Override
     public void paint(float alpha) {
-	surface.clear();
-
-	ship.paint(surface);
+	gameHandler.paint(alpha);
     }
 
     @Override
     public void update(float delta) {
-	ship.update(delta);
+	gameHandler.update(delta);
     }
 
     @Override

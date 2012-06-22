@@ -53,8 +53,14 @@ class Point {
 
     private void recalc() {
 	dirty = false;
-	currentX = (float)(Math.cos(rotation) * originalX) + (float)(Math.sin(rotation) * originalY);
-	currentY = -(float)(Math.sin(rotation) * originalX) + (float)(Math.cos(rotation) * originalY);
+
+	currentX = 
+	    (float)(Math.cos(rotation) * originalX) + 
+	    (float)(Math.sin(rotation) * originalY);
+	currentY = 
+	    -(float)(Math.sin(rotation) * originalX) + 
+	    (float)(Math.cos(rotation) * originalY);
+
 	currentX += translationX;
 	currentY += translationY;
     }

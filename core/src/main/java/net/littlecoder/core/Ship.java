@@ -9,16 +9,16 @@ class Ship {
     // rotation in radians per second
     private static final float MAX_SPEED = 400f;
     private static final float ACCELERATION = 500f;
-    private static final float ROTATION = (float)Math.toRadians(180f);
+    private static final float ROTATION_SPEED = (float)Math.toRadians(180f);
 
     private float x;
     private float y;
     private float vx;
     private float vy;
+    // rotation from 0 to 360, where 0 is pointing up
     private float rot;
 
-    private float areaWidth;
-    private float areaHeight;
+    private Surface surface;
 
     private boolean accelerating;
     private boolean steeringRight;
@@ -36,12 +36,11 @@ class Ship {
 	new Line(pointLeft, pointTop)
     };
     
-    public Ship (float areaWidth, float areaHeight) {
-	this.areaWidth = areaWidth;
-	this.areaHeight = areaHeight;
+    public Ship (Surface surface) {
+	this.surface = surface;
 
-	x = areaWidth / 2f;
-	y = areaHeight / 2f;
+	x = surface.width() / 2f;
+	y = surface.height() / 2f;
 	vx = 0.0f;
 	vy = 0.0f;
 	rot = 0.0f;
@@ -49,6 +48,22 @@ class Ship {
 	accelerating = false;
 	steeringRight = false;
 	steeringLeft = false;
+    }
+
+    public float tipX() {
+	return pointTop.x();
+    }
+
+    public float tipY() {
+	return pointTop.y();
+    }
+
+    public float rot() {
+	return rot;
+    }
+
+    public Surface surface() {
+	return surface;
     }
 
     public void paint(Surface surface) {
@@ -84,9 +99,9 @@ class Ship {
 
 	if (steeringRight != steeringLeft) {
 	    if (steeringRight)
-		rot -= (delta / 1000f) * ROTATION;
+		rot -= (delta / 1000f) * ROTATION_SPEED;
 	    if (steeringLeft)
-		rot += (delta / 1000f) * ROTATION;
+		rot += (delta / 1000f) * ROTATION_SPEED;
 	}
     }
 
@@ -104,13 +119,13 @@ class Ship {
 	y += vy * (delta / 1000f);
 
 	while (x < 0)
-	    x += areaWidth;
-	while (x > areaWidth)
-	    x -= areaWidth;
+	    x += surface.width();
+	while (x > surface.width())
+	    x -= surface.width();
 	while (y < 0)
-	    y += areaHeight;
-	while (y > areaHeight)
-	    y -= areaHeight;
+	    y += surface.height();
+	while (y > surface.height())
+	    y -= surface.height();
     }
 
 }
