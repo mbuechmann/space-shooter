@@ -12,14 +12,18 @@ import playn.core.Surface;
 class GameHandler implements Keyboard.Listener {
 
     private Surface surface;
-    private Ship ship;
 
+    private Ship ship;
+    private ArrayDeque<Asteroid> asteroids;
     private ArrayDeque<Bullet> bullets;
     private boolean shooting = false;
  
     public GameHandler(Surface surface) {
 	this.surface = surface;
-	this.ship = new Ship(surface);
+	ship = new Ship(surface);
+	asteroids = new ArrayDeque<Asteroid>();
+	for (int i = 0; i < 5; i++)
+	    asteroids.add(new Asteroid((byte)0, surface));
 	bullets = new ArrayDeque<Bullet>();
 	keyboard().setListener(this);
     }
@@ -34,6 +38,12 @@ class GameHandler implements Keyboard.Listener {
 	    Bullet b = (Bullet)i.next();
 	    b.paint(alpha);
 	}
+
+	i = asteroids.iterator();
+	while (i.hasNext()) {
+	    Asteroid a = (Asteroid)i.next();
+	    a.paint(alpha);
+	}
     }
 
     public void update(float delta) {
@@ -45,6 +55,12 @@ class GameHandler implements Keyboard.Listener {
 	    b.update(delta);
 	    if (b.isDead())
 		i.remove();
+	}
+
+	i = asteroids.iterator();
+	while (i.hasNext()) {
+	    Asteroid a = (Asteroid)i.next();
+	    a.update(delta);
 	}
 
 	if (shooting) {
