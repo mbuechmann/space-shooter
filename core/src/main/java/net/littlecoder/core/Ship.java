@@ -29,12 +29,8 @@ class Ship {
     private static Point pointRight = new Point(5f, 5f);
     private static Point pointBottom = new Point(0f, 0);
     private static Point pointLeft = new Point(-5f, 5f);
-    private static Line[] lines = {
-	new Line(pointTop, pointRight),
-	new Line(pointRight, pointBottom),
-	new Line(pointBottom, pointLeft),
-	new Line(pointLeft, pointTop)
-    };
+    private static Point[] points = {pointTop, pointRight, pointBottom, pointLeft};
+    private static Polyline polyline = new Polyline(points);
     
     public Ship (Surface surface) {
 	this.surface = surface;
@@ -68,9 +64,7 @@ class Ship {
 
     public void paint(float alpha) {
 	surface.setFillColor(0xFFFFFF);
-
-	for (Line l : lines)
-	    l.setRotation(rot).setTranslation(x, y).paint(surface);
+	polyline.setRotation(rot).setTranslation(x, y).paint(surface);
     }
 
     public void accelerate(boolean on) {
