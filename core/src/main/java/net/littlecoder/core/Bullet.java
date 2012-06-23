@@ -5,7 +5,7 @@ import playn.core.Surface;
 class Bullet {
 
     // speed in pixels per second, time to live in milliseconds
-    private static final float SPEED = 400f;
+    private static final float SPEED = 450f;
     private static final float TTL = 3000f;
 
     private float x;
