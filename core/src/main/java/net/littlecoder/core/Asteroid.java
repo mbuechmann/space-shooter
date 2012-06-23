@@ -13,7 +13,8 @@ class Asteroid {
     private static final Point[][][] POINTS = {
 	{
 	    {new Point(-10f, 0f), new Point(-5f, 1f), new Point(-3f, 8f), new Point(5f, 8f), new Point(8f, -2f), new Point(1f, -10f), new Point(-6f, -9f)},
-	    {new Point(-10f, 8f), new Point(-7f, 10f), new Point(5f, 5f), new Point(9f, 1f), new Point(3f, -8f), new Point(-5f, -5f), new Point( -7f, 4f)}
+	    {new Point(-10f, 8f), new Point(-7f, 10f), new Point(5f, 5f), new Point(9f, 1f), new Point(3f, -8f), new Point(-5f, -5f), new Point( -7f, 4f)},
+	    {new Point(-6f, 0f), new Point(-8f, 4f), new Point(-3f, 8f), new Point(0f, 5f), new Point(4f, 6f), new Point(6f, 2f), new Point(4f, -1f), new Point(2f, -8f), new Point(-5f, -7f)}
 	}, {
 	}, {
 	}
@@ -21,7 +22,8 @@ class Asteroid {
     private static final Polyline[][] POLYLINES = {
 	{
 	    new Polyline(POINTS[0][0]),
-	    new Polyline(POINTS[0][1])
+	    new Polyline(POINTS[0][1]),
+	    new Polyline(POINTS[0][2])
 	}, {
 	}, {
 	}
