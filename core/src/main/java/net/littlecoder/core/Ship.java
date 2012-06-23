@@ -24,13 +24,17 @@ class Ship {
     private boolean steeringRight;
     private boolean steeringLeft;
 
-    // Define the shape
-    private static Point pointTop = new Point(0f, -10f);
-    private static Point pointRight = new Point(5f, 5f);
-    private static Point pointBottom = new Point(0f, 0);
-    private static Point pointLeft = new Point(-5f, 5f);
-    private static Point[] points = {pointTop, pointRight, pointBottom, pointLeft};
-    private static Polyline polyline = new Polyline(points);
+    // The shape of the ship
+    private static Point shipTop = new Point(0f, -10f);
+    private static Point shipRight = new Point(5f, 5f);
+    private static Point shipBottom = new Point(0f, 0);
+    private static Point shipLeft = new Point(-5f, 5f);
+    private static Point[] shipPoints = {shipTop, shipRight, shipBottom, shipLeft};
+    private static Polyline shipPolyline = new Polyline(shipPoints);
+
+    // The shape of the thruster
+    private static Point[] thrusterPoints = {new Point(-3f, 2f), shipBottom, new Point(3f, 2f), new Point(0f, 7f)};
+    private static Polyline thrusterPolyline = new Polyline(thrusterPoints);
     
     public Ship (Surface surface) {
 	this.surface = surface;
@@ -47,11 +51,11 @@ class Ship {
     }
 
     public float tipX() {
-	return pointTop.x();
+	return shipTop.x();
     }
 
     public float tipY() {
-	return pointTop.y();
+	return shipTop.y();
     }
 
     public float rot() {
@@ -64,7 +68,9 @@ class Ship {
 
     public void paint(float alpha) {
 	surface.setFillColor(0xFFFFFF);
-	polyline.setRotation(rot).setTranslation(x, y).paint(surface);
+	shipPolyline.setRotation(rot).setTranslation(x, y).paint(surface);
+	if (accelerating)
+	    thrusterPolyline.setRotation(rot).setTranslation(x, y).paint(surface);
     }
 
     public void accelerate(boolean on) {
