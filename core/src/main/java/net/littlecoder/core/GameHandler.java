@@ -23,7 +23,7 @@ class GameHandler implements Keyboard.Listener {
 	ship = new Ship(surface);
 	asteroids = new ArrayDeque<Asteroid>();
 	for (int i = 0; i < 5; i++)
-	    asteroids.add(new Asteroid((byte)0, surface));
+	    asteroids.add(new Asteroid((byte)1, surface));
 	bullets = new ArrayDeque<Bullet>();
 	keyboard().setListener(this);
     }
@@ -48,25 +48,9 @@ class GameHandler implements Keyboard.Listener {
 
     public void update(float delta) {
 	ship.update(delta);
-
-	Iterator i = bullets.iterator();
-	while (i.hasNext()) {
-	    Bullet b = (Bullet)i.next();
-	    b.update(delta);
-	    if (b.isDead())
-		i.remove();
-	}
-
-	i = asteroids.iterator();
-	while (i.hasNext()) {
-	    Asteroid a = (Asteroid)i.next();
-	    a.update(delta);
-	}
-
-	if (shooting) {
-	    bullets.add(new Bullet(ship));
-	    shooting = false;
-	}
+	updateBullets(delta);
+	updateAsteroids(delta);
+	detectCollisions(delta);
     }
 
     public void onKeyDown(Keyboard.Event event) {
@@ -92,5 +76,56 @@ class GameHandler implements Keyboard.Listener {
     }
     
     public void onKeyTyped(Keyboard.TypedEvent event) {}
+
+    private void updateBullets(float delta) {
+	Iterator i = bullets.iterator();
+	while (i.hasNext()) {
+	    Bullet b = (Bullet)i.next();
+	    b.update(delta);
+	    if (b.isDead())
+		i.remove();
+	}
+
+ 	if (shooting) {
+	    bullets.add(new Bullet(ship));
+	    shooting = false;
+	}
+   }
+
+    private void updateAsteroids(float delta) {
+	ArrayDeque<Asteroid> newAsteroids = new ArrayDeque<Asteroid>();
+
+	Iterator i = asteroids.iterator();
+	while (i.hasNext()) {
+	    Asteroid a = (Asteroid)i.next();
+	    if (a.isDead()) {
+		if (a.canSpawnChilds()) {
+		    newAsteroids.add(a.spawnChild());
+		    newAsteroids.add(a.spawnChild());
+		}
+		i.remove();
+	    } else
+		a.update(delta);
+	}
+
+	i = newAsteroids.iterator();
+	while (i.hasNext())
+	    asteroids.add((Asteroid)i.next());
+    }
+
+    private void detectCollisions(float delta) {
+	Iterator i = asteroids.iterator();
+	while (i.hasNext()) {
+	    Asteroid a = (Asteroid)i.next();
+	    Iterator j = bullets.iterator();
+	    while (j.hasNext()) {
+		Bullet b = (Bullet)j.next();
+		if (!b.isDead() && a.isCollidingWith(b)) {
+		    a.die();
+		    b.die();
+		}
+	    }
+	}
+    }
 
 }

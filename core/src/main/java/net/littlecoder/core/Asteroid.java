@@ -15,7 +15,9 @@ class Asteroid {
 	    {new Point(-10f, 0f), new Point(-5f, 1f), new Point(-3f, 8f), new Point(5f, 8f), new Point(8f, -2f), new Point(1f, -10f), new Point(-6f, -9f)},
 	    {new Point(-10f, 8f), new Point(-7f, 10f), new Point(5f, 5f), new Point(9f, 1f), new Point(3f, -8f), new Point(-5f, -5f), new Point( -7f, 4f)},
 	    {new Point(-6f, 0f), new Point(-8f, 4f), new Point(-3f, 8f), new Point(0f, 5f), new Point(4f, 6f), new Point(6f, 2f), new Point(4f, -1f), new Point(2f, -8f), new Point(-5f, -7f)}
-	}, {
+	}, 
+	{
+	    {new Point(-15f, -15f), new Point(-15f, 15f), new Point(15f, 15f), new Point(15f, -15f)}
 	}, {
 	}
     };
@@ -25,6 +27,7 @@ class Asteroid {
 	    new Polyline(POINTS[0][1]),
 	    new Polyline(POINTS[0][2])
 	}, {
+	    new Polyline(POINTS[1][0]),
 	}, {
 	}
     };
@@ -39,6 +42,8 @@ class Asteroid {
     private Surface surface;
     private Polyline polyline;
 
+    private boolean dead = false;
+
     public Asteroid(byte size, Surface surface) {
 	this.size = size;
 	this.surface = surface;
@@ -47,7 +52,7 @@ class Asteroid {
 	Random random = new Random();
 
 	int r = random.nextInt(POLYLINES[size].length);
-	polyline = POLYLINES[size][r];
+	polyline = POLYLINES[size][r].clone();
 
 	do {
 	    x = random.nextFloat() * surface.width();
@@ -85,6 +90,39 @@ class Asteroid {
 	    y -= surface.height();
 
 	rot += Math.toRadians(vrot * (delta / 1000f));
+    }
+
+    public boolean isCollidingWith(Bullet bullet) {
+	return polyline.intersectsLine(
+	    (double)bullet.x(),
+	    (double)bullet.y(),
+	    (double)bullet.lastX(),
+	    (double)bullet.lastY()
+        );
+    }
+
+    public void die() {
+	dead = true;
+    }
+
+    public boolean isDead() {
+	return dead;
+    }
+
+    public boolean canSpawnChilds() {
+	return (size > 0);
+    }
+
+    public Asteroid spawnChild() {
+	Asteroid a = null;
+
+	if (size > 0) {
+	    a = new Asteroid((byte)(size - 1), surface);
+	    a.x = x;
+	    a.y = y;
+	}
+
+	return a;
     }
 
 }

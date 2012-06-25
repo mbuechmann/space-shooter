@@ -12,8 +12,11 @@ class Bullet {
     private float y;
     private float vx;
     private float vy;
+    private float distanceX = 0f;
+    private float distanceY = 0f;
 
     private float age = 0f;
+    private boolean dead = false;
 
     private Surface surface;
     
@@ -27,8 +30,11 @@ class Bullet {
 
     public void update(float delta) {
 	// TODO: This is not DRY, see Ship
-	x += vx * (delta / 1000f);
-	y += vy * (delta / 1000f);
+	distanceX = vx * (delta / 1000f);
+	distanceY = vy * (delta / 1000f);
+
+	x += distanceX;
+	y += distanceY;
 
 	while (x < 0)
 	    x += surface.width();
@@ -46,8 +52,28 @@ class Bullet {
 	surface.fillRect(x, y, 2f, 2f);
     }
 
+    public void die() {
+	dead = true;
+    }
+
     public boolean isDead() {
-	return age > TTL;
+	return dead || age > TTL;
+    }
+
+    public float x() {
+	return x;
+    }
+
+    public float y() {
+	return y;
+    }
+
+    public float lastX() {
+	return x - distanceX;
+    }
+
+    public float lastY() {
+	return y - distanceY;
     }
 
 }
