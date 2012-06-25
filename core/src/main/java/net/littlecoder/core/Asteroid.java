@@ -68,7 +68,7 @@ class Asteroid {
     }
 
     public void paint(float alpha) {
-	polyline.setRotation(rot).setTranslation(x, y).paint(surface);
+	polyline.transform(rot, x, y).paint(surface);
     }
 
     public void update(float delta) {

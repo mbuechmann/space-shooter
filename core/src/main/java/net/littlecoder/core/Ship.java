@@ -51,11 +51,11 @@ class Ship {
     }
 
     public float tipX() {
-	return shipTop.x();
+	return shipTop.x;
     }
 
     public float tipY() {
-	return shipTop.y();
+	return shipTop.y;
     }
 
     public float rot() {
@@ -68,9 +68,9 @@ class Ship {
 
     public void paint(float alpha) {
 	surface.setFillColor(0xFFFFFF);
-	shipPolyline.setRotation(rot).setTranslation(x, y).paint(surface);
+	shipPolyline.transform(rot, x, y).paint(surface);
 	if (accelerating)
-	    thrusterPolyline.setRotation(rot).setTranslation(x, y).paint(surface);
+	    thrusterPolyline.transform(rot, x, y).paint(surface);
     }
 
     public void accelerate(boolean on) {

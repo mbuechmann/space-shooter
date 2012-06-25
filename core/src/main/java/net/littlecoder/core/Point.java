@@ -1,68 +1,33 @@
 package net.littlecoder.core;
 
-class Point {
+import java.awt.geom.Point2D;
+
+class Point extends Point2D.Float {
     
     private float originalX;
     private float originalY;
     private float currentX;
     private float currentY;
 
-    private float rotation;
-    private float translationX;
-    private float translationY;
-    private boolean dirty;
-
     public Point(float x, float y) {
 	originalX = x;
 	originalY = y;
-	currentX = x;
-	currentY = y;
-
-	rotation = 0f;
-	translationX = 0f;
-	translationY = 0f;
-	dirty = false;
+	this.x = x;
+	this.y = y;
     }
 
-    public Point setRotation(float angle) {
-	dirty = true;
-	rotation = angle;
+    public Point transform(float angle, float translationX, float translationY) {
+	x = 
+	    (float)(Math.cos(angle) * originalX) + 
+	    (float)(Math.sin(angle) * originalY);
+	y = 
+	    -(float)(Math.sin(angle) * originalX) + 
+	    (float)(Math.cos(angle) * originalY);
+
+	x += translationX;
+	y += translationY;
 
 	return this;
-    }
-
-    public Point setTranslation(float x, float y) {
-	dirty = true;
-	translationX = x;
-	translationY = y;
-
-	return this;
-    }
-
-    public float x() {
-	if (dirty)
-	    recalc();
-	return currentX;
-    }
-
-    public float y() {
-	if (dirty)
-	    recalc();
-	return currentY;
-    }
-
-    private void recalc() {
-	dirty = false;
-
-	currentX = 
-	    (float)(Math.cos(rotation) * originalX) + 
-	    (float)(Math.sin(rotation) * originalY);
-	currentY = 
-	    -(float)(Math.sin(rotation) * originalX) + 
-	    (float)(Math.cos(rotation) * originalY);
-
-	currentX += translationX;
-	currentY += translationY;
     }
 
 }

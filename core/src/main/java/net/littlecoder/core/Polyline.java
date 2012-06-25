@@ -21,19 +21,14 @@ class Polyline {
 	for (Line l : lines)
 	    l.paint(surface);
     }
+
+    public Polyline transform(float angle, float translationX, float translationY) {
+	for (Point p : points)
+	    p.transform(angle, translationX, translationY);
+	for (Line l : lines)
+	    l.recalc();
+
+	return this;
+    }
     
-    public Polyline setRotation(float angle) {
-	for (Point p : points)
-	    p.setRotation(angle);
-
-	return this;
-    }
-
-    public Polyline setTranslation(float x, float y) {
-	for (Point p : points)
-	    p.setTranslation(x, y);
-
-	return this;
-    }
-
 }
