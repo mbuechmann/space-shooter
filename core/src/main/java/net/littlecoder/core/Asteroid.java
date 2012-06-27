@@ -133,11 +133,18 @@ class Asteroid {
 	return dead;
     }
 
+    // Spawn two Asteroids with a smaller size or a lot of debris
     public Asteroid[] spawnChildren() {
+	Asteroid[] children;
 	if (size > 0)
-	    return spawnSmallerAsteroids();
+	    children = new Asteroid[2];
+	else
+	    children = new Asteroid[15];
 
-	return spawnDebris();
+	for (int i = 0; i < children.length; i++)
+	    children[i] = spawnChild();
+
+	return children;
     }
 
     private Asteroid spawnChild() {
@@ -157,17 +164,6 @@ class Asteroid {
 	a.y = y;
 
 	return a;
-    }
-
-    private Asteroid[] spawnSmallerAsteroids() {
-	Asteroid[] res = {spawnChild(), spawnChild()};
-	return res;
-    }
-
-    private Asteroid[] spawnDebris() {
-	Asteroid[] res = {
-	    spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild()};
-	return res;
     }
 
 }
