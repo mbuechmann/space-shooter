@@ -48,7 +48,10 @@ class Polyline {
     }
 
     public Polyline clone() {
-	return new Polyline(points.clone());
+	Point[] clonedPoints = new Point[points.length];
+	for (int i = 0; i < points.length; i++)
+	    clonedPoints[i] = (Point)points[i].clone();
+	return new Polyline(clonedPoints);
     }
 
 }
