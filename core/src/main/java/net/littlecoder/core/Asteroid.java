@@ -35,17 +35,21 @@ class Asteroid {
 	}
     };
     private byte size;
-    private float x;
-    private float y;
+    protected float x;
+    protected float y;
     private float rot;
-    private float vx;
-    private float vy;
+    protected float vx;
+    protected float vy;
     private float vrot;
 
-    private Surface surface;
+    protected Surface surface;
     private Polyline polyline;
 
     private boolean dead = false;
+
+    public Asteroid(Surface surface) {
+	this((byte)2, surface);
+    }
 
     public Asteroid(byte size, Surface surface) {
 	this.size = size;
@@ -54,9 +58,18 @@ class Asteroid {
 	// Randomly initialize this Asteroid
 	Random random = new Random();
 
+	initPolyline(random);
+	initPosition(random);
+	initVelocity(random);
+	initRotation(random);
+    }
+
+    private void initPolyline(Random random) {
 	int r = random.nextInt(POLYLINES[size].length);
 	polyline = POLYLINES[size][r].clone();
+    }
 
+    private void initPosition(Random random) {
 	do {
 	    x = random.nextFloat() * surface.width();
 	    y = random.nextFloat() * surface.height();
@@ -66,12 +79,16 @@ class Asteroid {
 	    y > (surface.height() / 3f) &&
 	    y < (surface.height() / 3f * 2f)
 	);
+    }
 
+    private void initVelocity(Random random) {
 	float angle = random.nextFloat() * 2f * (float)Math.PI;
 	vx = (float)Math.sin(angle) * SPEED;
 	vy = (float)Math.cos(angle) * SPEED;
+    }
 
-	rot = random.nextFloat() * 2f * (float)Math.PI;
+    private void initRotation(Random random) {
+   	rot = random.nextFloat() * 2f * (float)Math.PI;
 	vrot = MIN_ROTATION_SPEED + random.nextFloat() * (MAX_ROTATION_SPEED - MIN_ROTATION_SPEED);
     }
 
@@ -116,20 +133,41 @@ class Asteroid {
 	return dead;
     }
 
-    public boolean canSpawnChilds() {
-	return (size > 0);
+    public Asteroid[] spawnChildren() {
+	if (size > 0)
+	    return spawnSmallerAsteroids();
+
+	return spawnDebris();
     }
 
-    public Asteroid spawnChild() {
+    private Asteroid spawnChild() {
 	Asteroid a = null;
 
-	if (size > 0) {
+	if (size > 0)
 	    a = new Asteroid((byte)(size - 1), surface);
-	    a.x = x;
-	    a.y = y;
+	else {
+	    a = new Debris(surface);
+	    Random random = new Random();
+	    float r = random.nextFloat() * 2f + 2f;
+	    a.vx = (a.vx + vx) / r;
+	    a.vy = (a.vy + vy) / r;
 	}
 
+	a.x = x;
+	a.y = y;
+
 	return a;
+    }
+
+    private Asteroid[] spawnSmallerAsteroids() {
+	Asteroid[] res = {spawnChild(), spawnChild()};
+	return res;
+    }
+
+    private Asteroid[] spawnDebris() {
+	Asteroid[] res = {
+	    spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild(), spawnChild()};
+	return res;
     }
 
 }

@@ -99,10 +99,9 @@ class GameHandler implements Keyboard.Listener {
 	while (i.hasNext()) {
 	    Asteroid a = (Asteroid)i.next();
 	    if (a.isDead()) {
-		if (a.canSpawnChilds()) {
-		    newAsteroids.add(a.spawnChild());
-		    newAsteroids.add(a.spawnChild());
-		}
+		Asteroid[] children = a.spawnChildren();
+		for (Asteroid c : children)
+		    newAsteroids.add(c);
 		i.remove();
 	    } else
 		a.update(delta);
