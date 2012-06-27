@@ -23,6 +23,7 @@ class Ship {
     private boolean accelerating;
     private boolean steeringRight;
     private boolean steeringLeft;
+    private boolean dead = false;
 
     // The shape of the ship
     private static Point shipTop = new Point(0f, -10f);
@@ -30,7 +31,7 @@ class Ship {
     private static Point shipBottom = new Point(0f, 0);
     private static Point shipLeft = new Point(-5f, 5f);
     private static Point[] shipPoints = {shipTop, shipRight, shipBottom, shipLeft};
-    private static Polyline shipPolyline = new Polyline(shipPoints);
+    public static Polyline shipPolyline = new Polyline(shipPoints);
 
     // The shape of the thruster
     private static Point[] thrusterPoints = {new Point(-3f, 2f), shipBottom, new Point(3f, 2f), new Point(0f, 7f)};
@@ -89,6 +90,10 @@ class Ship {
 	regardPiloting(delta);
 	limitVelocity();
 	updatePosition(delta);
+    }
+
+    public void die() {
+	dead = true;
     }
 
     private void regardPiloting(float delta) {

@@ -22,8 +22,8 @@ class GameHandler implements Keyboard.Listener {
 	this.surface = surface;
 	ship = new Ship(surface);
 	asteroids = new ArrayDeque<Asteroid>();
-	for (int i = 0; i < 5; i++)
-	    asteroids.add(new Asteroid((byte)1, surface));
+	for (int i = 0; i < 10; i++)
+	    asteroids.add(new Asteroid((byte)2, surface));
 	bullets = new ArrayDeque<Bullet>();
 	keyboard().setListener(this);
     }
@@ -126,6 +126,14 @@ class GameHandler implements Keyboard.Listener {
 		}
 	    }
 	}
+
+	i = asteroids.iterator();
+	while (i.hasNext()) {
+	    Asteroid a = (Asteroid)i.next();
+	    if (a.isCollidingWith(ship))
+		ship.die();
+	}
+
     }
 
 }

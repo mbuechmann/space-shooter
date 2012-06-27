@@ -39,6 +39,14 @@ class Polyline {
 	return false;
     }
 
+    public boolean intersectsPolyline(Polyline polyline) {
+	for (Line l : polyline.lines)
+	    if (intersectsLine(l.x1, l.y1, l.x2, l.y2))
+		return true;
+		
+	return false;
+    }
+
     public Polyline clone() {
 	return new Polyline(points.clone());
     }

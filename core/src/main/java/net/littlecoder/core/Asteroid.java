@@ -19,6 +19,7 @@ class Asteroid {
 	    {new Point(-9f, 0f), new Point(-15f, 5f), new Point(-13f, 9f), new Point(-5f, 15f), new Point(0f, 11f), new Point(5f, 14f), new Point(10f, 10f), new Point(15f, -2f), new Point(5f, -15f), new Point(-12f, -14f), new Point(-15f, -5f)},
 	    {new Point(-14f, 5f), new Point(-6f, 14f), new Point(-1f, 10f), new Point(1f, 13f), new Point(5f, 10f), new Point(10f, 10f), new Point(14f, -3f), new Point(7f, -8f), new Point(0f, -11f), new Point(-4f, -13f), new Point(-12f, -12f), new Point(-10f, -3f)}
 	}, {
+	    {new Point(-18f, 0f), new Point(-15f, 10f), new Point(-3f, 12f), new Point(0f, 20f), new Point(7f, 16f), new Point(15f, 14f), new Point(20f, 0f), new Point(18f, -3f), new Point(15f, -10f), new Point(8f, -12f), new Point(0f, -15f), new Point(-2f, -12f), new Point(-12f, -10f)}
 	}
     };
     private static final Polyline[][] POLYLINES = {
@@ -30,6 +31,7 @@ class Asteroid {
 	    new Polyline(POINTS[1][0]),
 	    new Polyline(POINTS[1][1])
 	}, {
+	    new Polyline(POINTS[2][0])
 	}
     };
     private byte size;
@@ -100,6 +102,10 @@ class Asteroid {
 	    (double)bullet.lastX(),
 	    (double)bullet.lastY()
         );
+    }
+
+    public boolean isCollidingWith(Ship ship) {
+	return polyline.intersectsPolyline(ship.shipPolyline);
     }
 
     public void die() {
