@@ -17,6 +17,8 @@ class GameHandler implements Keyboard.Listener {
     private ArrayDeque<Asteroid> asteroids;
     private ArrayDeque<Bullet> bullets;
     private boolean shooting = false;
+
+    private byte lifes = 3;
  
     public GameHandler(Surface surface) {
 	this.surface = surface;
@@ -30,8 +32,9 @@ class GameHandler implements Keyboard.Listener {
 
     public void paint(float alpha) {
 	surface.clear();
-
-	ship.paint(alpha);
+	
+	if (ship != null)
+	    ship.paint(alpha);
 
 	Iterator i = bullets.iterator();
 	while (i.hasNext()) {
@@ -47,32 +50,41 @@ class GameHandler implements Keyboard.Listener {
     }
 
     public void update(float delta) {
-	ship.update(delta);
+	updateShip(delta);
 	updateBullets(delta);
 	updateAsteroids(delta);
 	detectCollisions(delta);
     }
 
     public void onKeyDown(Keyboard.Event event) {
-	if (event.key() == Key.UP)
-	    ship.accelerate(true);
-	if (event.key() == Key.RIGHT)
-	    ship.steerRight(true);
-	if (event.key() == Key.LEFT)
-	    ship.steerLeft(true);
-	if (event.key() == Key.SPACE)
+	if (ship != null) {
+	    if (event.key() == Key.UP)
+		ship.accelerate(true);
+	    if (event.key() == Key.RIGHT)
+		ship.steerRight(true);
+	    if (event.key() == Key.LEFT)
+		ship.steerLeft(true);
+	} else {
+	    if (event.key() == Key.SPACE)
+		ship = new Ship(surface);
+	}
+
+	if (ship != null && !ship.isDisabled() && event.key() == Key.SPACE)
 	    shooting = true;
+	
 	if (event.key() == Key.ESCAPE)
 	    System.exit(0);
     }
 
     public void onKeyUp(Keyboard.Event event) {
-	if (event.key() == Key.UP)
-	    ship.accelerate(false);
-	if (event.key() == Key.RIGHT)
-	    ship.steerRight(false);
-	if (event.key() == Key.LEFT)
-	    ship.steerLeft(false);
+	if (ship != null) {
+	    if (event.key() == Key.UP)
+		ship.accelerate(false);
+	    if (event.key() == Key.RIGHT)
+		ship.steerRight(false);
+	    if (event.key() == Key.LEFT)
+		ship.steerLeft(false);
+	}
     }
     
     public void onKeyTyped(Keyboard.TypedEvent event) {}
@@ -91,6 +103,16 @@ class GameHandler implements Keyboard.Listener {
 	    shooting = false;
 	}
    }
+
+    private void updateShip(float delta) {
+	if (ship != null) {
+	    ship.update(delta);
+	    if (ship.isDead()) {
+		lifes --;
+		ship = null;
+	    }
+	}
+    }
 
     private void updateAsteroids(float delta) {
 	ArrayDeque<Asteroid> newAsteroids = new ArrayDeque<Asteroid>();
@@ -126,11 +148,13 @@ class GameHandler implements Keyboard.Listener {
 	    }
 	}
 
-	i = asteroids.iterator();
-	while (i.hasNext()) {
-	    Asteroid a = (Asteroid)i.next();
-	    if (a.isCollidingWith(ship))
-		ship.die();
+	if (ship != null) {
+	    i = asteroids.iterator();
+	    while (i.hasNext()) {
+		Asteroid a = (Asteroid)i.next();
+		if (a.isCollidingWith(ship))
+		    ship.die();
+	    }
 	}
 
     }

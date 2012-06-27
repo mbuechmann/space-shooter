@@ -10,6 +10,7 @@ class Ship {
     private static final float MAX_SPEED = 400f;
     private static final float ACCELERATION = 500f;
     private static final float ROTATION_SPEED = (float)Math.toRadians(180f);
+    private static final float TTD = 3000f;
 
     private float x;
     private float y;
@@ -24,6 +25,7 @@ class Ship {
     private boolean steeringRight;
     private boolean steeringLeft;
     private boolean dead = false;
+    private float age = 0f;
 
     // The shape of the ship
     private static Point shipTop = new Point(0f, -10f);
@@ -70,7 +72,7 @@ class Ship {
     public void paint(float alpha) {
 	surface.setFillColor(0xFFFFFF);
 	shipPolyline.transform(rot, x, y).paint(surface);
-	if (accelerating)
+	if (accelerating && !dead)
 	    thrusterPolyline.transform(rot, x, y).paint(surface);
     }
 
@@ -90,23 +92,34 @@ class Ship {
 	regardPiloting(delta);
 	limitVelocity();
 	updatePosition(delta);
+	progressDeath(delta);
     }
 
     public void die() {
 	dead = true;
     }
 
-    private void regardPiloting(float delta) {
-	if (accelerating) {
-	    vx -= Math.sin(rot) * delta/1000f * ACCELERATION;
-	    vy -= Math.cos(rot) * delta/1000f * ACCELERATION;
-	}
+    public boolean isDead() {
+	return (age >= TTD);
+    }
 
-	if (steeringRight != steeringLeft) {
-	    if (steeringRight)
-		rot -= (delta / 1000f) * ROTATION_SPEED;
-	    if (steeringLeft)
-		rot += (delta / 1000f) * ROTATION_SPEED;
+    public boolean isDisabled() {
+	return dead;
+    }
+
+    private void regardPiloting(float delta) {
+	if (!dead) {
+	    if (accelerating) {
+		vx -= Math.sin(rot) * delta/1000f * ACCELERATION;
+		vy -= Math.cos(rot) * delta/1000f * ACCELERATION;
+	    }
+
+	    if (steeringRight != steeringLeft) {
+		if (steeringRight)
+		    rot -= (delta / 1000f) * ROTATION_SPEED;
+		if (steeringLeft)
+		    rot += (delta / 1000f) * ROTATION_SPEED;
+	    }
 	}
     }
 
@@ -131,6 +144,11 @@ class Ship {
 	    y += surface.height();
 	while (y > surface.height())
 	    y -= surface.height();
+    }
+
+    private void progressDeath(float delta) {
+	if (dead)
+	    age += delta;
     }
 
 }
