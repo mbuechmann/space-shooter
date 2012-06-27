@@ -19,6 +19,7 @@ class GameHandler implements Keyboard.Listener {
     private boolean shooting = false;
 
     private byte lifes = 3;
+    private Polyline shipPolyline;
  
     public GameHandler(Surface surface) {
 	this.surface = surface;
@@ -27,6 +28,9 @@ class GameHandler implements Keyboard.Listener {
 	for (int i = 0; i < 10; i++)
 	    asteroids.add(new Asteroid((byte)2, surface));
 	bullets = new ArrayDeque<Bullet>();
+
+	shipPolyline = ship.shipPolyline.clone();
+
 	keyboard().setListener(this);
     }
 
@@ -47,6 +51,9 @@ class GameHandler implements Keyboard.Listener {
 	    Asteroid a = (Asteroid)i.next();
 	    a.paint(alpha);
 	}
+
+	for (int l = 0; l < lifes; l++)
+	    shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
     }
 
     public void update(float delta) {
