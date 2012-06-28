@@ -1,5 +1,7 @@
 package net.littlecoder.core;
 
+import java.util.Random;
+
 import playn.core.Surface;
 
 class Ship {
@@ -38,6 +40,9 @@ class Ship {
     // The shape of the thruster
     private static Point[] thrusterPoints = {new Point(-3f, 2f), shipBottom, new Point(3f, 2f), new Point(0f, 7f)};
     private static Polyline thrusterPolyline = new Polyline(thrusterPoints);
+
+    // The remains of the ship when it is destroyed
+    private Remains[] remains;
     
     public Ship (Surface surface) {
 	this.surface = surface;
@@ -97,6 +102,7 @@ class Ship {
 
     public void die() {
 	dead = true;
+	initRemains();
     }
 
     public boolean isDead() {
@@ -149,6 +155,10 @@ class Ship {
     private void progressDeath(float delta) {
 	if (dead)
 	    age += delta;
+    }
+
+    private void initRemains() {
+	remains = new Remains[6];
     }
 
 }
