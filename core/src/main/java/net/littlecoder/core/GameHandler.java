@@ -71,14 +71,13 @@ class GameHandler implements Keyboard.Listener {
 		ship.steerRight(true);
 	    if (event.key() == Key.LEFT)
 		ship.steerLeft(true);
+	    if (!ship.isDisabled() && event.key() == Key.SPACE)
+		shooting = true;
 	} else {
 	    if (event.key() == Key.SPACE)
 		ship = new Ship(surface);
 	}
 
-	if (ship != null && !ship.isDisabled() && event.key() == Key.SPACE)
-	    shooting = true;
-	
 	if (event.key() == Key.ESCAPE)
 	    System.exit(0);
     }
