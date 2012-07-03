@@ -75,10 +75,14 @@ class Ship {
     }
 
     public void paint(float alpha) {
-	surface.setFillColor(0xFFFFFF);
-	shipPolyline.transform(rot, x, y).paint(surface);
-	if (accelerating && !dead)
-	    thrusterPolyline.transform(rot, x, y).paint(surface);
+	if (!dead) {
+	    surface.setFillColor(0xFFFFFF);
+	    shipPolyline.transform(rot, x, y).paint(surface);
+	    if (accelerating && !dead)
+		thrusterPolyline.transform(rot, x, y).paint(surface);
+	} else
+	    for (Remains r : remains)
+		r.paint(alpha);
     }
 
     public void accelerate(boolean on) {
@@ -98,11 +102,14 @@ class Ship {
 	limitVelocity();
 	updatePosition(delta);
 	progressDeath(delta);
+	if (dead)
+	    for (Remains r : remains)
+		r.update(delta);
     }
 
     public void die() {
-	dead = true;
 	initRemains();
+	dead = true;
     }
 
     public boolean isDead() {
@@ -158,7 +165,11 @@ class Ship {
     }
 
     private void initRemains() {
-	remains = new Remains[6];
+	remains = new Remains[4];
+	remains[0] = new Remains(new Line(shipTop, shipRight), surface, x, y, vx, vy, rot);
+	remains[1] = new Remains(new Line(shipRight, shipBottom), surface, x, y, vx, vy, rot);
+	remains[2] = new Remains(new Line(shipBottom, shipLeft), surface, x, y, vx, vy, rot);
+	remains[3] = new Remains(new Line(shipLeft, shipTop), surface, x, y, vx, vy, rot);
     }
 
 }

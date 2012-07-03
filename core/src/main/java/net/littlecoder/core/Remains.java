@@ -1,5 +1,7 @@
 package net.littlecoder.core;
 
+import java.util.Random;
+
 import playn.core.Surface;
 
 class Remains {
@@ -14,12 +16,21 @@ class Remains {
 
     private Surface surface;
 
-    public Remains(Ship ship, Line line) {
+    public Remains(Line line, Surface surface, float x, float y, float vx, float vy, float rot) {
 	this.line = line;
+	this.surface = surface;
+	this.x = x;
+	this.y = y;
+	this.vx = vx;
+	this.vy = vy;
+
+	Random random = new Random();
+	this.rot = rot;
+	vrot = (float)Math.toRadians(random.nextFloat() * 10f);
     }
 
     public void paint(float alpha) {
-	line.paint(surface);
+	line.transform(rot, x, y).paint(surface);
     }
 
     public void update(float delta) {
