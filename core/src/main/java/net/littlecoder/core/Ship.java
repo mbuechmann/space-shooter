@@ -5,7 +5,7 @@ import java.util.Random;
 import playn.core.Sound;
 import playn.core.Surface;
 
-class Ship {
+class Ship extends GameElement {
 
     // Speed in pixel/second,
     // accelaeration in pixel/second^2,
@@ -15,18 +15,9 @@ class Ship {
     private static final float ROTATION_SPEED = (float)Math.toRadians(180f);
     private static final float TTD = 3000f;
 
-    private float x;
-    private float y;
-    private float vx;
-    private float vy;
-    // rotation from 0 to 360, where 0 is pointing up
-    private float rot;
-
-    private Surface surface;
-
-    private boolean accelerating;
-    private boolean steeringRight;
-    private boolean steeringLeft;
+    private boolean accelerating = false;
+    private boolean steeringRight = false;
+    private boolean steeringLeft = false;
     private boolean dead = false;
     private float age = 0f;
 
@@ -49,21 +40,12 @@ class Ship {
     private Remains[] remains;
     
     public Ship (Surface surface) {
-	this.surface = surface;
+	super(surface);
 
 	x = surface.width() / 2f;
 	y = surface.height() / 2f;
-	vx = 0.0f;
-	vy = 0.0f;
-	rot = 0.0f;
 
-	accelerating = false;
-	steeringRight = false;
-	steeringLeft = false;
-
-	engineSound = SoundPlayer.getSound("Engines");
-	engineSound.setLooping(true);
-	dieSound = SoundPlayer.getSound("Die 2");
+	initSounds();
     }
 
     public float tipX() {
@@ -146,12 +128,11 @@ class Ship {
 		vy -= Math.cos(rot) * delta/1000f * ACCELERATION;
 	    }
 
-	    if (steeringRight != steeringLeft) {
-		if (steeringRight)
-		    rot -= (delta / 1000f) * ROTATION_SPEED;
-		if (steeringLeft)
-		    rot += (delta / 1000f) * ROTATION_SPEED;
-	    }
+	    vrot = 0f;
+	    if (steeringRight)
+		vrot -=  ROTATION_SPEED;
+	    if (steeringLeft)
+		vrot += ROTATION_SPEED;
 	}
     }
 
@@ -164,23 +145,15 @@ class Ship {
 	}
     }
 
-    private void updatePosition(float delta) {
-	x += vx * (delta / 1000f);
-	y += vy * (delta / 1000f);
-
-	while (x < 0)
-	    x += surface.width();
-	while (x > surface.width())
-	    x -= surface.width();
-	while (y < 0)
-	    y += surface.height();
-	while (y > surface.height())
-	    y -= surface.height();
-    }
-
     private void progressDeath(float delta) {
 	if (dead)
 	    age += delta;
+    }
+
+    private void initSounds() {
+	engineSound = SoundPlayer.getSound("Engines");
+	engineSound.setLooping(true);
+	dieSound = SoundPlayer.getSound("Die 2");
     }
 
     private void initRemains() {

@@ -4,7 +4,7 @@ import java.util.Random;
 
 import playn.core.Surface;
 
-class Asteroid {
+class Asteroid extends GameElement {
 
     private static final float SPEED = 100f;
     private static final float MIN_ROTATION_SPEED = -90f;
@@ -35,14 +35,7 @@ class Asteroid {
 	}
     };
     private byte size;
-    protected float x;
-    protected float y;
-    private float rot;
-    protected float vx;
-    protected float vy;
-    private float vrot;
 
-    protected Surface surface;
     private Polyline polyline;
 
     private boolean dead = false;
@@ -52,8 +45,8 @@ class Asteroid {
     }
 
     public Asteroid(byte size, Surface surface) {
+	super(surface);
 	this.size = size;
-	this.surface = surface;
 	
 	// Randomly initialize this Asteroid
 	Random random = new Random();
@@ -89,7 +82,9 @@ class Asteroid {
 
     private void initRotation(Random random) {
    	rot = random.nextFloat() * 2f * (float)Math.PI;
-	vrot = MIN_ROTATION_SPEED + random.nextFloat() * (MAX_ROTATION_SPEED - MIN_ROTATION_SPEED);
+	vrot = (float)Math.toRadians(
+	    MIN_ROTATION_SPEED + random.nextFloat() * (MAX_ROTATION_SPEED - MIN_ROTATION_SPEED)
+        );
     }
 
     public void paint(float alpha) {
@@ -97,19 +92,7 @@ class Asteroid {
     }
 
     public void update(float delta) {
-	x += vx * (delta / 1000f);
-	y += vy * (delta / 1000f);
-
-	while (x < 0)
-	    x += surface.width();
-	while (x > surface.width())
-	    x -= surface.width();
-	while (y < 0)
-	    y += surface.height();
-	while (y > surface.height())
-	    y -= surface.height();
-
-	rot += Math.toRadians(vrot * (delta / 1000f));
+	updatePosition(delta);
     }
 
     public boolean isCollidingWith(Bullet bullet) {

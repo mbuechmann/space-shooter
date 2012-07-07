@@ -18,18 +18,7 @@ class Debris extends Asteroid {
     }
 
     public void update(float delta) {
-	x += vx * (delta / 1000f);
-	y += vy * (delta / 1000f);
-
-	while (x < 0)
-	    x += surface.width();
-	while (x > surface.width())
-	    x -= surface.width();
-	while (y < 0)
-	    y += surface.height();
-	while (y > surface.height())
-	    y -= surface.height();
-	
+	updatePosition(delta);
 	age += delta;
     }
 
