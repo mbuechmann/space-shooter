@@ -20,7 +20,7 @@ class GameHandler implements Keyboard.Listener {
 
     private byte lifes = 3;
     private Polyline shipPolyline;
- 
+
     public GameHandler(Surface surface) {
 	this.surface = surface;
 	ship = new Ship(surface);
@@ -32,6 +32,9 @@ class GameHandler implements Keyboard.Listener {
 	shipPolyline = ship.shipPolyline.clone();
 
 	keyboard().setListener(this);
+
+	SoundPlayer.loadSound("Lazer");
+	SoundPlayer.loadSound("Die");
     }
 
     public void paint(float alpha) {
@@ -150,6 +153,7 @@ class GameHandler implements Keyboard.Listener {
 		if (!b.isDead() && a.isCollidingWith(b)) {
 		    a.die();
 		    b.die();
+		    SoundPlayer.playSound("Die");
 		}
 	    }
 	}

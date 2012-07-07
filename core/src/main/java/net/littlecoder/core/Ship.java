@@ -2,6 +2,7 @@ package net.littlecoder.core;
 
 import java.util.Random;
 
+import playn.core.Sound;
 import playn.core.Surface;
 
 class Ship {
@@ -41,6 +42,9 @@ class Ship {
     private static Point[] thrusterPoints = {new Point(-3f, 2f), shipBottom, new Point(3f, 2f), new Point(0f, 7f)};
     private static Polyline thrusterPolyline = new Polyline(thrusterPoints);
 
+    private Sound engineSound;
+    private Sound dieSound;
+
     // The remains of the ship when it is destroyed
     private Remains[] remains;
     
@@ -56,6 +60,10 @@ class Ship {
 	accelerating = false;
 	steeringRight = false;
 	steeringLeft = false;
+
+	engineSound = SoundPlayer.getSound("Engines");
+	engineSound.setLooping(true);
+	dieSound = SoundPlayer.getSound("Die 2");
     }
 
     public float tipX() {
@@ -86,7 +94,16 @@ class Ship {
     }
 
     public void accelerate(boolean on) {
-	accelerating = on;
+	if (!dead) {
+	    accelerating = on;
+	    if (accelerating != engineSound.isPlaying()) {
+		if (accelerating)
+		    engineSound.play();
+		else
+		    engineSound.stop();
+	    }
+	}
+	    
     }
 
     public void steerRight(boolean on) {
@@ -109,6 +126,8 @@ class Ship {
 
     public void die() {
 	initRemains();
+	engineSound.stop();
+	dieSound.play();
 	dead = true;
     }
 

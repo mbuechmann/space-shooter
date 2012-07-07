@@ -26,6 +26,8 @@ class Bullet {
 	vx = -(float)Math.sin(ship.rot()) * SPEED;
 	vy = -(float)Math.cos(ship.rot()) * SPEED;
 	surface = ship.surface();
+
+	SoundPlayer.playSound("Lazer");
     }
 
     public void update(float delta) {
