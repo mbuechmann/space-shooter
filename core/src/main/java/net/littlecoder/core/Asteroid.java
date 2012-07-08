@@ -55,6 +55,7 @@ class Asteroid extends GameElement {
 	initPosition(random);
 	initVelocity(random);
 	initRotation(random);
+	initSound();
     }
 
     private void initPolyline(Random random) {
@@ -87,6 +88,10 @@ class Asteroid extends GameElement {
         );
     }
 
+    private void initSound() {
+	SoundPlayer.loadSound("Die");
+    }
+
     public void paint(float alpha) {
 	polyline.transform(rot, x, y).paint(surface);
     }
@@ -110,6 +115,7 @@ class Asteroid extends GameElement {
 
     public void die() {
 	dead = true;
+	SoundPlayer.playSound("Die");
     }
 
     public boolean isDead() {
