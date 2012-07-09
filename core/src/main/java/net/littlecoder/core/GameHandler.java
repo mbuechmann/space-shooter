@@ -48,8 +48,6 @@ class GameHandler implements Keyboard.Listener {
 	Font font = graphics().createFont("Vector Battle", Font.Style.PLAIN, SCORE_FONT_SIZE);
 	System.out.println(font.name());
         scoreTextFormat = new TextFormat().withFont(font).withTextColor(0xFFFFFFFF);
-        
-	createScoreImage();
     }
 
     public void paint(float alpha) {
@@ -73,8 +71,7 @@ class GameHandler implements Keyboard.Listener {
 	for (int l = 0; l < lifes; l++)
 	    shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
 	
-	createScoreImage();
-	surface.drawImage(scoreImage, surface.width() / 2f, 10f);
+	paintScore();
     }
 
     public void update(float delta) {
@@ -187,7 +184,7 @@ class GameHandler implements Keyboard.Listener {
 
     }
 
-    private void createScoreImage() {
+    private void paintScore() {
 	String scoreText = String.valueOf(score);
 	if (score < 10)
 	    scoreText = "0" + scoreText;
@@ -197,12 +194,17 @@ class GameHandler implements Keyboard.Listener {
 	    scoreText = "0" + scoreText;
 	if (score < 10000)
 	    scoreText = "0" + scoreText;
+
 	TextLayout layout = graphics().layoutText(scoreText, scoreTextFormat);
-	scoreImage = graphics().createImage(
-	    (int)Math.ceil(layout.width()),
-	    (int)Math.ceil(layout.height())
-	);
+	if (scoreImage == null)
+	    scoreImage = graphics().createImage(
+		(int)Math.ceil(layout.width()),
+		(int)Math.ceil(layout.height())
+	    );
+
+	scoreImage.canvas().clear();
 	scoreImage.canvas().drawText(layout, 0, 0);
+	surface.drawImage(scoreImage, surface.width() - layout.width() - 10, 10f);
     }
 
 }
