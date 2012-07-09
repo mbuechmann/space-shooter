@@ -35,6 +35,7 @@ class GameHandler implements Keyboard.Listener {
 
     public GameHandler(Surface surface) {
 	this.surface = surface;
+
 	ship = new Ship(surface);
 	asteroids = new ArrayDeque<Asteroid>();
 	for (int i = 0; i < 10; i++)
@@ -46,7 +47,6 @@ class GameHandler implements Keyboard.Listener {
 	keyboard().setListener(this);
 
 	Font font = graphics().createFont("Vector Battle", Font.Style.PLAIN, SCORE_FONT_SIZE);
-	System.out.println(font.name());
         scoreTextFormat = new TextFormat().withFont(font).withTextColor(0xFFFFFFFF);
     }
 
