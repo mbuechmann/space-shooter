@@ -58,6 +58,10 @@ class Asteroid extends GameElement {
 	initSound();
     }
 
+    public byte size() {
+	return size;
+    }
+
     private void initPolyline(Random random) {
 	int r = random.nextInt(POLYLINES[size].length);
 	polyline = POLYLINES[size][r].clone();
@@ -110,7 +114,7 @@ class Asteroid extends GameElement {
     }
 
     public boolean isCollidingWith(Ship ship) {
-	return polyline.intersectsPolyline(ship.shipPolyline);
+	return !dead && polyline.intersectsPolyline(ship.shipPolyline);
     }
 
     public void die() {

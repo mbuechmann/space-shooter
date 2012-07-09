@@ -5,11 +5,17 @@ import static playn.core.PlayN.*;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 
+import playn.core.CanvasImage;
+import playn.core.Font;
 import playn.core.Key;
 import playn.core.Keyboard;
 import playn.core.Surface;
+import playn.core.TextFormat;
+import playn.core.TextLayout;
 
 class GameHandler implements Keyboard.Listener {
+
+    private static final float SCORE_FONT_SIZE = 15f;
 
     private Surface surface;
 
@@ -19,6 +25,12 @@ class GameHandler implements Keyboard.Listener {
     private boolean shooting = false;
 
     private byte lifes = 3;
+    private int score = 0;
+
+    private TextFormat scoreTextFormat;
+
+    private CanvasImage scoreImage;
+
     private Polyline shipPolyline;
 
     public GameHandler(Surface surface) {
@@ -32,6 +44,12 @@ class GameHandler implements Keyboard.Listener {
 	shipPolyline = ship.shipPolyline.clone();
 
 	keyboard().setListener(this);
+
+	Font font = graphics().createFont("Vector Battle", Font.Style.PLAIN, SCORE_FONT_SIZE);
+	System.out.println(font.name());
+        scoreTextFormat = new TextFormat().withFont(font).withTextColor(0xFFFFFFFF);
+        
+	createScoreImage();
     }
 
     public void paint(float alpha) {
@@ -54,6 +72,9 @@ class GameHandler implements Keyboard.Listener {
 
 	for (int l = 0; l < lifes; l++)
 	    shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
+	
+	createScoreImage();
+	surface.drawImage(scoreImage, surface.width() / 2f, 10f);
     }
 
     public void update(float delta) {
@@ -150,6 +171,7 @@ class GameHandler implements Keyboard.Listener {
 		if (!b.isDead() && a.isCollidingWith(b)) {
 		    a.die();
 		    b.die();
+		    score += 3 - a.size();
 		}
 	    }
 	}
@@ -163,6 +185,24 @@ class GameHandler implements Keyboard.Listener {
 	    }
 	}
 
+    }
+
+    private void createScoreImage() {
+	String scoreText = String.valueOf(score);
+	if (score < 10)
+	    scoreText = "0" + scoreText;
+	if (score < 100)
+	    scoreText = "0" + scoreText;
+	if (score < 1000)
+	    scoreText = "0" + scoreText;
+	if (score < 10000)
+	    scoreText = "0" + scoreText;
+	TextLayout layout = graphics().layoutText(scoreText, scoreTextFormat);
+	scoreImage = graphics().createImage(
+	    (int)Math.ceil(layout.width()),
+	    (int)Math.ceil(layout.height())
+	);
+	scoreImage.canvas().drawText(layout, 0, 0);
     }
 
 }
