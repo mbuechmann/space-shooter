@@ -18,7 +18,7 @@ class Ship extends GameElement {
     private boolean accelerating = false;
     private boolean steeringRight = false;
     private boolean steeringLeft = false;
-    private boolean dead = false;
+    private boolean dying = false;
     private float age = 0f;
 
     // The shape of the ship
@@ -65,27 +65,18 @@ class Ship extends GameElement {
     }
 
     public void paint(float alpha) {
-	if (!dead) {
+	if (!dying) {
 	    surface.setFillColor(0xFFFFFF);
 	    shipPolyline.transform(rot, x, y).paint(surface);
-	    if (accelerating && !dead)
+	    if (accelerating && !dying)
 		thrusterPolyline.transform(rot, x, y).paint(surface);
-	} else
+	} else if (!isDead())
 	    for (Remains r : remains)
 		r.paint(alpha);
     }
 
     public void accelerate(boolean on) {
-	if (!dead) {
-	    accelerating = on;
-	    if (accelerating != engineSound.isPlaying()) {
-		if (accelerating)
-		    engineSound.play();
-		else
-		    engineSound.stop();
-	    }
-	}
-	    
+	accelerating = on;
     }
 
     public void steerRight(boolean on) {
@@ -97,20 +88,22 @@ class Ship extends GameElement {
     }
 
     public void update(float delta) {
-	regardPiloting(delta);
-	limitVelocity();
-	updatePosition(delta);
-	progressDeath(delta);
-	if (dead)
+	if (!dying) {
+	    regardPiloting(delta);
+	    limitVelocity();
+	    updatePosition(delta);
+	} else {
+    	    progressDeath(delta);
 	    for (Remains r : remains)
 		r.update(delta);
+	}
     }
 
     public void die() {
 	initRemains();
 	engineSound.stop();
 	dieSound.play();
-	dead = true;
+	dying = true;
     }
 
     public boolean isDead() {
@@ -118,21 +111,26 @@ class Ship extends GameElement {
     }
 
     public boolean isDisabled() {
-	return dead;
+	return dying;
     }
 
     private void regardPiloting(float delta) {
-	if (!dead) {
-	    if (accelerating) {
-		vx -= Math.sin(rot) * delta/1000f * ACCELERATION;
-		vy -= Math.cos(rot) * delta/1000f * ACCELERATION;
-	    }
+	if (accelerating) {
+	    vx -= Math.sin(rot) * delta/1000f * ACCELERATION;
+	    vy -= Math.cos(rot) * delta/1000f * ACCELERATION;
+	}
 
-	    vrot = 0f;
-	    if (steeringRight)
-		vrot -=  ROTATION_SPEED;
-	    if (steeringLeft)
-		vrot += ROTATION_SPEED;
+	vrot = 0f;
+	if (steeringRight)
+	    vrot -=  ROTATION_SPEED;
+	if (steeringLeft)
+	    vrot += ROTATION_SPEED;
+
+	if (accelerating != engineSound.isPlaying()) {
+	    if (accelerating)
+		engineSound.play();
+	    else
+		engineSound.stop();
 	}
     }
 
@@ -146,8 +144,7 @@ class Ship extends GameElement {
     }
 
     private void progressDeath(float delta) {
-	if (dead)
-	    age += delta;
+	age += delta;
     }
 
     private void initSounds() {

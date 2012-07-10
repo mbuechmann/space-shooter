@@ -51,8 +51,7 @@ class GameHandler implements Keyboard.Listener {
     public void paint(float alpha) {
 	surface.clear();
 	
-	if (ship != null)
-	    ship.paint(alpha);
+	ship.paint(alpha);
 
 	Iterator i = bullets.iterator();
 	while (i.hasNext()) {
@@ -82,7 +81,7 @@ class GameHandler implements Keyboard.Listener {
     }
 
     public void onKeyDown(Keyboard.Event event) {
-	if (ship != null) {
+	if (!ship.isDead()) {
 	    if (event.key() == Key.UP)
 		ship.accelerate(true);
 	    if (event.key() == Key.RIGHT)
@@ -101,7 +100,7 @@ class GameHandler implements Keyboard.Listener {
     }
 
     public void onKeyUp(Keyboard.Event event) {
-	if (ship != null) {
+	if (!ship.isDead()) {
 	    if (event.key() == Key.UP)
 		ship.accelerate(false);
 	    if (event.key() == Key.RIGHT)
@@ -129,13 +128,7 @@ class GameHandler implements Keyboard.Listener {
    }
 
     private void updateShip(float delta) {
-	if (ship != null) {
-	    ship.update(delta);
-	    if (ship.isDead()) {
-		lifes --;
-		ship = null;
-	    }
-	}
+	ship.update(delta);
     }
 
     private void updateAsteroids(float delta) {
@@ -173,12 +166,14 @@ class GameHandler implements Keyboard.Listener {
 	    }
 	}
 
-	if (ship != null) {
-	    i = asteroids.iterator();
-	    while (i.hasNext()) {
-		Asteroid a = (Asteroid)i.next();
-		if (a.isCollidingWith(ship))
-		    ship.die();
+	i = asteroids.iterator();
+
+	while (i.hasNext()) {
+	    Asteroid a = (Asteroid)i.next();
+	    if (a.isCollidingWith(ship)) {
+		ship.die();
+		lifes--;
+		break;
 	    }
 	}
     }

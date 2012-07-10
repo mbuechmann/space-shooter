@@ -114,7 +114,7 @@ class Asteroid extends GameElement {
     }
 
     public boolean isCollidingWith(Ship ship) {
-	return !dead && polyline.intersectsPolyline(ship.shipPolyline);
+	return !dead && !ship.isDisabled() && polyline.intersectsPolyline(ship.shipPolyline);
     }
 
     public void die() {
