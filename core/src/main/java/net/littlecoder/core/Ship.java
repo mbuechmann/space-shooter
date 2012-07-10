@@ -19,7 +19,7 @@ class Ship extends GameElement {
     private boolean steeringRight = false;
     private boolean steeringLeft = false;
     private boolean dying = false;
-    private float age = 0f;
+    private float age;
 
     // The shape of the ship
     private static Point shipTop = new Point(0f, -10f);
@@ -41,11 +41,19 @@ class Ship extends GameElement {
     
     public Ship (Surface surface) {
 	super(surface);
+	reinitialize();
+	initSounds();
+    }
 
+    public void reinitialize() {
 	x = surface.width() / 2f;
 	y = surface.height() / 2f;
-
-	initSounds();
+	vx = 0f;
+	vy = 0f;
+	rot = 0f;
+	vrot = 0f;
+	dying = false;
+	age = 0f;
     }
 
     public float tipX() {

@@ -93,7 +93,7 @@ class GameHandler implements Keyboard.Listener {
 	    if (!ship.isDead())
 		shooting = !ship.isDisabled() && true;
 	    else
-		ship = new Ship(surface);
+		ship.reinitialize();
 
 	if (event.key() == Key.ESCAPE)
 	    System.exit(0);
@@ -212,13 +212,20 @@ class GameHandler implements Keyboard.Listener {
 	    float y = surface.height() / 4f;
 	    if (ship.y < surface.height() / 2f)
 		y += surface.height() / 2f;
-	    surface.drawImage(nextLevelImage, (surface.width() - layout.width()) / 2f, y);
+	    surface.drawImage(
+	        nextLevelImage, (surface.width() - layout.width()) / 2f, y
+	    );
 	}
     }
 
     private void initTexts() {
-	Font font = graphics().createFont("Vector Battle", Font.Style.PLAIN, SCORE_FONT_SIZE);
-        smallTextFormat = new TextFormat().withFont(font).withTextColor(0xFFFFFFFF).withAlignment(TextFormat.Alignment.CENTER);
+	Font font = graphics().createFont(
+            "Vector Battle", Font.Style.PLAIN, SCORE_FONT_SIZE
+        );
+        smallTextFormat = new TextFormat().
+	    withFont(font).
+	    withTextColor(0xFFFFFFFF).
+	    withAlignment(TextFormat.Alignment.CENTER);
 
 	TextLayout l = graphics().layoutText("00", smallTextFormat);
 	levelImage = graphics().createImage(
