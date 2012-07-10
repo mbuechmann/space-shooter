@@ -20,34 +20,29 @@ class GameHandler implements Keyboard.Listener {
     private Surface surface;
 
     private Ship ship;
-    private ArrayDeque<Asteroid> asteroids;
-    private ArrayDeque<Bullet> bullets;
+    private ArrayDeque<Asteroid> asteroids = new ArrayDeque<Asteroid>();
+    private ArrayDeque<Bullet> bullets = new ArrayDeque<Bullet>();
     private boolean shooting = false;
 
-    private byte lifes = 3;
-    private int score = 0;
+    private byte lifes;
+    private int score;
+    private int level;
 
-    private TextFormat scoreTextFormat;
-
+    private TextFormat smallTextFormat;
     private CanvasImage scoreImage;
+    private CanvasImage levelImage;
 
     private Polyline shipPolyline;
 
     public GameHandler(Surface surface) {
 	this.surface = surface;
 
-	ship = new Ship(surface);
-	asteroids = new ArrayDeque<Asteroid>();
-	for (int i = 0; i < 10; i++)
-	    asteroids.add(new Asteroid((byte)2, surface));
-	bullets = new ArrayDeque<Bullet>();
+	initTexts();
+	initLevel(1);
 
-	shipPolyline = ship.shipPolyline.clone();
+	shipPolyline = Ship.shipPolyline.clone();
 
 	keyboard().setListener(this);
-
-	Font font = graphics().createFont("Vector Battle", Font.Style.PLAIN, SCORE_FONT_SIZE);
-        scoreTextFormat = new TextFormat().withFont(font).withTextColor(0xFFFFFFFF);
     }
 
     public void paint(float alpha) {
@@ -72,6 +67,7 @@ class GameHandler implements Keyboard.Listener {
 	    shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
 	
 	paintScore();
+	paintLevel();
     }
 
     public void update(float delta) {
@@ -181,7 +177,6 @@ class GameHandler implements Keyboard.Listener {
 		    ship.die();
 	    }
 	}
-
     }
 
     private void paintScore() {
@@ -195,16 +190,53 @@ class GameHandler implements Keyboard.Listener {
 	if (score < 10000)
 	    scoreText = "0" + scoreText;
 
-	TextLayout layout = graphics().layoutText(scoreText, scoreTextFormat);
-	if (scoreImage == null)
-	    scoreImage = graphics().createImage(
-		(int)Math.ceil(layout.width()),
-		(int)Math.ceil(layout.height())
-	    );
+	TextLayout layout = graphics().layoutText(scoreText, smallTextFormat);
 
 	scoreImage.canvas().clear();
 	scoreImage.canvas().drawText(layout, 0, 0);
 	surface.drawImage(scoreImage, surface.width() - layout.width() - 10, 10f);
+    }
+
+    private void paintLevel() {
+	String levelText = String.valueOf(level);
+	if (level < 10)
+	    levelText = "0" + levelText;
+
+	TextLayout layout = graphics().layoutText(levelText, smallTextFormat);
+
+	levelImage.canvas().clear();
+	levelImage.canvas().drawText(layout, 0, 0);
+	surface.drawImage(levelImage, surface.width() / 2f - layout.width(), 10f);
+    }
+
+    private void initTexts() {
+	Font font = graphics().createFont("Vector Battle", Font.Style.PLAIN, SCORE_FONT_SIZE);
+        smallTextFormat = new TextFormat().withFont(font).withTextColor(0xFFFFFFFF);
+
+	TextLayout l = graphics().layoutText("00", smallTextFormat);
+	levelImage = graphics().createImage(
+	    (int)Math.ceil(l.width()),
+	    (int)Math.ceil(l.height())
+        );
+
+	l = graphics().layoutText("00000", smallTextFormat);
+	scoreImage = graphics().createImage(
+	    (int)Math.ceil(l.width()),
+	    (int)Math.ceil(l.height())
+        );
+    }
+
+    private void initLevel(int level) {
+	this.level = level;
+	if (level == 1) {
+	    lifes = 3;
+	    score = 0;
+	    ship = new Ship(surface);
+	}
+
+	asteroids.clear();
+	for (int i = 0; i < level + 2; i++)
+	    asteroids.add(new Asteroid((byte)2, surface));
     }
 
 }
