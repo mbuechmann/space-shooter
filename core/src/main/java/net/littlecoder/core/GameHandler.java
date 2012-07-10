@@ -32,6 +32,7 @@ class GameHandler implements Keyboard.Listener {
     private TextFormat smallTextFormat;
     private CanvasImage scoreImage;
     private CanvasImage levelImage;
+    private CanvasImage nextLevelImage;
 
     private Polyline shipPolyline;
 
@@ -194,20 +195,30 @@ class GameHandler implements Keyboard.Listener {
     }
 
     private void paintLevel() {
-	String levelText = String.valueOf(level);
+	String text = String.valueOf(level);
 	if (level < 10)
-	    levelText = "0" + levelText;
+	    text = "0" + text;
 
-	TextLayout layout = graphics().layoutText(levelText, smallTextFormat);
-
+	TextLayout layout = graphics().layoutText(text, smallTextFormat);
 	levelImage.canvas().clear();
 	levelImage.canvas().drawText(layout, 0, 0);
 	surface.drawImage(levelImage, surface.width() / 2f - layout.width(), 10f);
+
+	if (asteroids.isEmpty()) {
+	    text = "Next Level in\n" + (int)Math.ceil(timeToNextLevel / 1000) + " s";
+	    layout = graphics().layoutText(text, smallTextFormat);
+	    nextLevelImage.canvas().clear();
+	    nextLevelImage.canvas().drawText(layout, 0, 0);
+	    float y = surface.height() / 4f;
+	    if (ship.y < surface.height() / 2f)
+		y += surface.height() / 2f;
+	    surface.drawImage(nextLevelImage, (surface.width() - layout.width()) / 2f, y);
+	}
     }
 
     private void initTexts() {
 	Font font = graphics().createFont("Vector Battle", Font.Style.PLAIN, SCORE_FONT_SIZE);
-        smallTextFormat = new TextFormat().withFont(font).withTextColor(0xFFFFFFFF);
+        smallTextFormat = new TextFormat().withFont(font).withTextColor(0xFFFFFFFF).withAlignment(TextFormat.Alignment.CENTER);
 
 	TextLayout l = graphics().layoutText("00", smallTextFormat);
 	levelImage = graphics().createImage(
@@ -217,6 +228,12 @@ class GameHandler implements Keyboard.Listener {
 
 	l = graphics().layoutText("00000", smallTextFormat);
 	scoreImage = graphics().createImage(
+	    (int)Math.ceil(l.width()),
+	    (int)Math.ceil(l.height())
+        );
+
+	l = graphics().layoutText("Next Level in\n0 s", smallTextFormat);
+	nextLevelImage = graphics().createImage(
 	    (int)Math.ceil(l.width()),
 	    (int)Math.ceil(l.height())
         );
@@ -244,6 +261,10 @@ class GameHandler implements Keyboard.Listener {
 		timeToNextLevel = TIME_BETWEEN_LEVELS;
 	    }
 	}
+    }
+
+    private boolean isGameOver() {
+	return ship.isDead() && lifes == 0;
     }
 
 }
