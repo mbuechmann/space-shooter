@@ -81,33 +81,30 @@ class GameHandler implements Keyboard.Listener {
     }
 
     public void onKeyDown(Keyboard.Event event) {
-	if (!ship.isDead()) {
-	    if (event.key() == Key.UP)
-		ship.accelerate(true);
-	    if (event.key() == Key.RIGHT)
-		ship.steerRight(true);
-	    if (event.key() == Key.LEFT)
-		ship.steerLeft(true);
-	    if (!ship.isDisabled() && event.key() == Key.SPACE)
-		shooting = true;
-	} else {
-	    if (event.key() == Key.SPACE)
+	if (event.key() == Key.UP)
+	    ship.accelerate(true);
+	if (event.key() == Key.RIGHT)
+	    ship.steerRight(true);
+	if (event.key() == Key.LEFT)
+	    ship.steerLeft(true);
+
+	if (event.key() == Key.SPACE)
+	    if (!ship.isDead())
+		shooting = !ship.isDisabled() && true;
+	    else
 		ship = new Ship(surface);
-	}
 
 	if (event.key() == Key.ESCAPE)
 	    System.exit(0);
     }
 
     public void onKeyUp(Keyboard.Event event) {
-	if (!ship.isDead()) {
-	    if (event.key() == Key.UP)
-		ship.accelerate(false);
-	    if (event.key() == Key.RIGHT)
-		ship.steerRight(false);
-	    if (event.key() == Key.LEFT)
-		ship.steerLeft(false);
-	}
+	if (event.key() == Key.UP)
+	    ship.accelerate(false);
+	if (event.key() == Key.RIGHT)
+	    ship.steerRight(false);
+	if (event.key() == Key.LEFT)
+	    ship.steerLeft(false);
     }
     
     public void onKeyTyped(Keyboard.TypedEvent event) {}
