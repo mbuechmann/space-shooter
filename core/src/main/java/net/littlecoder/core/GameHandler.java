@@ -16,6 +16,7 @@ import playn.core.TextLayout;
 class GameHandler implements Keyboard.Listener {
 
     private static final float SCORE_FONT_SIZE = 15f;
+    private static final float TIME_BETWEEN_LEVELS = 3000f;
 
     private Surface surface;
 
@@ -33,6 +34,8 @@ class GameHandler implements Keyboard.Listener {
     private CanvasImage levelImage;
 
     private Polyline shipPolyline;
+
+    private float timeToNextLevel = TIME_BETWEEN_LEVELS;
 
     public GameHandler(Surface surface) {
 	this.surface = surface;
@@ -75,6 +78,7 @@ class GameHandler implements Keyboard.Listener {
 	updateBullets(delta);
 	updateAsteroids(delta);
 	detectCollisions(delta);
+	advanceLevel(delta);
     }
 
     public void onKeyDown(Keyboard.Event event) {
@@ -237,6 +241,17 @@ class GameHandler implements Keyboard.Listener {
 	asteroids.clear();
 	for (int i = 0; i < level + 2; i++)
 	    asteroids.add(new Asteroid((byte)2, surface));
+    }
+
+    private void advanceLevel(float delta) {
+	if (asteroids.isEmpty()) {
+	    timeToNextLevel -= delta;
+	    if (timeToNextLevel < 0f) {
+		level++;
+		initLevel(level);
+		timeToNextLevel = TIME_BETWEEN_LEVELS;
+	    }
+	}
     }
 
 }
