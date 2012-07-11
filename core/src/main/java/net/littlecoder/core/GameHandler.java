@@ -15,8 +15,10 @@ import playn.core.TextLayout;
 
 class GameHandler implements Keyboard.Listener {
 
-    private static final float SCORE_FONT_SIZE = 15f;
+    private static final float SMALL_FONT_SIZE = 15f;
+    private static final float LARGE_FONT_SIZE = 45f;
     private static final float TIME_BETWEEN_LEVELS = 3000f;
+    private static final float BLINK_INTERVAL = 2000f;
 
     private Surface surface;
 
@@ -25,24 +27,30 @@ class GameHandler implements Keyboard.Listener {
     private ArrayDeque<Bullet> bullets = new ArrayDeque<Bullet>();
     private boolean shooting = false;
 
-    private byte lifes;
-    private int score;
-    private int level;
+    private byte lifes = 0;
+    private int score = 0;
+    private int level = 0;
 
     private TextFormat smallTextFormat;
+    private TextFormat largeTextFormat;
     private CanvasImage scoreImage;
     private CanvasImage levelImage;
     private CanvasImage nextLevelImage;
+    private CanvasImage gameOverImage;
+    private CanvasImage pressFireImage;
 
     private Polyline shipPolyline;
 
     private float timeToNextLevel = TIME_BETWEEN_LEVELS;
 
+    private float blinkTime = 0f;
+
     public GameHandler(Surface surface) {
 	this.surface = surface;
 
 	initTexts();
-	initLevel(1);
+
+	ship = new Ship(surface);
 
 	shipPolyline = Ship.shipPolyline.clone();
 
@@ -51,34 +59,41 @@ class GameHandler implements Keyboard.Listener {
 
     public void paint(float alpha) {
 	surface.clear();
+
+	if (!isGameOver()) {
+	    ship.paint(alpha);
+
+	    Iterator i = bullets.iterator();
+	    while (i.hasNext()) {
+		Bullet b = (Bullet)i.next();
+		b.paint(alpha);
+	    }
+
+	    i = asteroids.iterator();
+	    while (i.hasNext()) {
+		Asteroid a = (Asteroid)i.next();
+		a.paint(alpha);
+	    }
+
+	    for (int l = 0; l < lifes; l++)
+		shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
 	
-	ship.paint(alpha);
+	} else
+	    paintGameOver();
 
-	Iterator i = bullets.iterator();
-	while (i.hasNext()) {
-	    Bullet b = (Bullet)i.next();
-	    b.paint(alpha);
-	}
-
-	i = asteroids.iterator();
-	while (i.hasNext()) {
-	    Asteroid a = (Asteroid)i.next();
-	    a.paint(alpha);
-	}
-
-	for (int l = 0; l < lifes; l++)
-	    shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
-	
 	paintScore();
 	paintLevel();
     }
 
     public void update(float delta) {
-	updateShip(delta);
-	updateBullets(delta);
-	updateAsteroids(delta);
-	detectCollisions(delta);
-	advanceLevel(delta);
+	if (!isGameOver()) {
+	    updateShip(delta);
+	    updateBullets(delta);
+	    updateAsteroids(delta);
+	    detectCollisions(delta);
+	    advanceLevel(delta);
+	} else
+	    blinkTime = (blinkTime + delta) % BLINK_INTERVAL;
     }
 
     public void onKeyDown(Keyboard.Event event) {
@@ -90,7 +105,9 @@ class GameHandler implements Keyboard.Listener {
 	    ship.steerLeft(true);
 
 	if (event.key() == Key.SPACE)
-	    if (!ship.isDead())
+	    if (isGameOver())
+	        initLevel(1);
+	    else if (!ship.isDead())
 		shooting = !ship.isDisabled() && true;
 	    else
 		ship.reinitialize();
@@ -204,7 +221,7 @@ class GameHandler implements Keyboard.Listener {
 	levelImage.canvas().drawText(layout, 0, 0);
 	surface.drawImage(levelImage, surface.width() / 2f - layout.width(), 10f);
 
-	if (asteroids.isEmpty()) {
+	if (asteroids.isEmpty() && !isGameOver()) {
 	    text = "Next Level in\n" + (int)Math.ceil(timeToNextLevel / 1000) + " s";
 	    layout = graphics().layoutText(text, smallTextFormat);
 	    nextLevelImage.canvas().clear();
@@ -218,40 +235,72 @@ class GameHandler implements Keyboard.Listener {
 	}
     }
 
+    private void paintGameOver() {
+	surface.drawImage(
+	    gameOverImage,
+	    (surface.width() - gameOverImage.width()) / 2f,
+	    (surface.height() / 3f - gameOverImage.height() / 2f)
+	);
+
+	if (blinkTime < BLINK_INTERVAL / 2f)
+	    surface.drawImage(
+	        pressFireImage,
+		(surface.width() - pressFireImage.width()) / 2f,
+		(surface.height() / 3f * 2f - pressFireImage.height() / 2f)
+	);
+    }
+
     private void initTexts() {
-	Font font = graphics().createFont(
-            "Vector Battle", Font.Style.PLAIN, SCORE_FONT_SIZE
+	Font smallFont = graphics().createFont(
+            "Vector Battle", Font.Style.PLAIN, SMALL_FONT_SIZE
         );
         smallTextFormat = new TextFormat().
-	    withFont(font).
+	    withFont(smallFont).
 	    withTextColor(0xFFFFFFFF).
 	    withAlignment(TextFormat.Alignment.CENTER);
-
 	TextLayout l = graphics().layoutText("00", smallTextFormat);
 	levelImage = graphics().createImage(
 	    (int)Math.ceil(l.width()),
 	    (int)Math.ceil(l.height())
         );
-
 	l = graphics().layoutText("00000", smallTextFormat);
 	scoreImage = graphics().createImage(
 	    (int)Math.ceil(l.width()),
 	    (int)Math.ceil(l.height())
         );
-
 	l = graphics().layoutText("Next Level in\n0 s", smallTextFormat);
 	nextLevelImage = graphics().createImage(
 	    (int)Math.ceil(l.width()),
 	    (int)Math.ceil(l.height())
         );
+	l = graphics().layoutText("Press Fire to start", smallTextFormat);
+	pressFireImage = graphics().createImage(
+	    (int)Math.ceil(l.width()),
+	    (int)Math.ceil(l.height())
+        );
+	pressFireImage.canvas().drawText(l, 0, 0);
+
+	Font largeFont = graphics().createFont(
+            "Vector Battle", Font.Style.BOLD, LARGE_FONT_SIZE
+        );
+        largeTextFormat = new TextFormat().
+	    withFont(largeFont).
+	    withTextColor(0xFFFFFFFF).
+	    withAlignment(TextFormat.Alignment.CENTER);
+	l = graphics().layoutText("Game Over", largeTextFormat);
+	gameOverImage = graphics().createImage(
+	    (int)Math.ceil(l.width()),
+	    (int)Math.ceil(l.height())
+        );
+	gameOverImage.canvas().drawText(l, 0, 0);
     }
 
     private void initLevel(int level) {
+	System.out.println("Initing level " + level);
 	this.level = level;
 	if (level == 1) {
 	    lifes = 3;
 	    score = 0;
-	    ship = new Ship(surface);
 	}
 
 	asteroids.clear();
@@ -271,7 +320,7 @@ class GameHandler implements Keyboard.Listener {
     }
 
     private boolean isGameOver() {
-	return ship.isDead() && lifes == 0;
+	return level == 0 || lifes == 0 && ship.isDead();
     }
 
 }
