@@ -13,6 +13,10 @@ import playn.core.Surface;
 import playn.core.TextFormat;
 import playn.core.TextLayout;
 
+// TODO: Move creation of images to helper method
+// TODO: Moce Game Over part to single class
+// TODO: Move bullets to a single class which handles recreation of
+//       of bullets in a memory economic way
 class GameHandler implements Keyboard.Listener {
 
     private static final float SMALL_FONT_SIZE = 15f;
@@ -250,6 +254,7 @@ class GameHandler implements Keyboard.Listener {
 	);
     }
 
+    // TODO: Move the creation of font images to a helper method
     private void initTexts() {
 	Font smallFont = graphics().createFont(
             "Vector Battle", Font.Style.PLAIN, SMALL_FONT_SIZE
@@ -296,7 +301,6 @@ class GameHandler implements Keyboard.Listener {
     }
 
     private void initLevel(int level) {
-	System.out.println("Initing level " + level);
 	this.level = level;
 	if (level == 1) {
 	    lifes = 3;
