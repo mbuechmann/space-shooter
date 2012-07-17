@@ -2,6 +2,8 @@ package net.littlecoder.core;
 
 import static playn.core.PlayN.*;
 
+import static net.littlecoder.core.ImageHelper.*;
+
 import java.util.ArrayDeque;
 import java.util.Iterator;
 
@@ -13,8 +15,8 @@ import playn.core.Surface;
 import playn.core.TextFormat;
 import playn.core.TextLayout;
 
-// TODO: Move creation of images to helper method
-// TODO: Moce Game Over part to single class
+// TODO: Move rerendering of dynamic texts to ImageHelper
+// TODO: Move Game Over part to single class
 // TODO: Move bullets to a single class which handles recreation of
 //       of bullets in a memory economic way
 class GameHandler implements Keyboard.Listener {
@@ -226,7 +228,7 @@ class GameHandler implements Keyboard.Listener {
 	surface.drawImage(levelImage, surface.width() / 2f - layout.width(), 10f);
 
 	if (asteroids.isEmpty() && !isGameOver()) {
-	    text = "Next Level in\n" + (int)Math.ceil(timeToNextLevel / 1000) + " s";
+	    text = "Next Level in\n\n" + (int)Math.ceil(timeToNextLevel / 1000) + " Sec";
 	    layout = graphics().layoutText(text, smallTextFormat);
 	    nextLevelImage.canvas().clear();
 	    nextLevelImage.canvas().drawText(layout, 0, 0);
@@ -254,50 +256,26 @@ class GameHandler implements Keyboard.Listener {
 	);
     }
 
-    // TODO: Move the creation of font images to a helper method
     private void initTexts() {
 	Font smallFont = graphics().createFont(
             "Vector Battle", Font.Style.PLAIN, SMALL_FONT_SIZE
         );
-        smallTextFormat = new TextFormat().
-	    withFont(smallFont).
-	    withTextColor(0xFFFFFFFF).
-	    withAlignment(TextFormat.Alignment.CENTER);
-	TextLayout l = graphics().layoutText("00", smallTextFormat);
-	levelImage = graphics().createImage(
-	    (int)Math.ceil(l.width()),
-	    (int)Math.ceil(l.height())
-        );
-	l = graphics().layoutText("00000", smallTextFormat);
-	scoreImage = graphics().createImage(
-	    (int)Math.ceil(l.width()),
-	    (int)Math.ceil(l.height())
-        );
-	l = graphics().layoutText("Next Level in\n0 s", smallTextFormat);
-	nextLevelImage = graphics().createImage(
-	    (int)Math.ceil(l.width()),
-	    (int)Math.ceil(l.height())
-        );
-	l = graphics().layoutText("Press Fire to start", smallTextFormat);
-	pressFireImage = graphics().createImage(
-	    (int)Math.ceil(l.width()),
-	    (int)Math.ceil(l.height())
-        );
-	pressFireImage.canvas().drawText(l, 0, 0);
-
 	Font largeFont = graphics().createFont(
             "Vector Battle", Font.Style.BOLD, LARGE_FONT_SIZE
         );
-        largeTextFormat = new TextFormat().
-	    withFont(largeFont).
-	    withTextColor(0xFFFFFFFF).
-	    withAlignment(TextFormat.Alignment.CENTER);
-	l = graphics().layoutText("Game Over", largeTextFormat);
-	gameOverImage = graphics().createImage(
-	    (int)Math.ceil(l.width()),
-	    (int)Math.ceil(l.height())
-        );
-	gameOverImage.canvas().drawText(l, 0, 0);
+	TextFormat.Alignment a = TextFormat.Alignment.CENTER;
+	int c = 0xFFFFFFFF;
+
+	smallTextFormat = new TextFormat().
+	    withFont(smallFont).
+	    withAlignment(a).
+	    withTextColor(c);
+
+	levelImage = createTextImage("00", smallFont, a, c);
+	scoreImage = createTextImage("00000", smallFont, a, c);
+	nextLevelImage = createTextImage("Next Level in\n\n0 Sec", smallFont, a, c);
+	pressFireImage = createTextImage("Press Fire to Start", smallFont, a, c);
+	gameOverImage = createTextImage("Game Over", largeFont, a, c);
     }
 
     private void initLevel(int level) {
