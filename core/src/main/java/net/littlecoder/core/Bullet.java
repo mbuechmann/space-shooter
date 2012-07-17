@@ -9,17 +9,23 @@ class Bullet extends GameElement {
     private float lastX;
     private float lastY;
 
-    private float age = 0f;
-    private boolean dead = false;
+    private float age;
+    private boolean dead;
 
     public Bullet(Ship ship) {
 	super(ship.surface);
+	reinitialize(ship);
+    }
+
+    public void reinitialize(Ship ship) {
 	x = ship.tipX();
 	y = ship.tipY();
 	lastX = x;
 	lastY = y;
 	vx = -(float)Math.sin(ship.rot()) * SPEED;
 	vy = -(float)Math.cos(ship.rot()) * SPEED;
+	dead = false;
+	age = 0f;
 
 	SoundPlayer.playSound("Lazer");
     }

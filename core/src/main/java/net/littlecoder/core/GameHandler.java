@@ -17,8 +17,6 @@ import playn.core.TextLayout;
 
 // TODO: Move rerendering of dynamic texts to ImageHelper
 // TODO: Move Game Over part to single class
-// TODO: Move bullets to a single class which handles recreation of
-//       of bullets in a memory economic way
 class GameHandler implements Keyboard.Listener {
 
     private static final float SMALL_FONT_SIZE = 15f;
@@ -30,7 +28,7 @@ class GameHandler implements Keyboard.Listener {
 
     private Ship ship;
     private ArrayDeque<Asteroid> asteroids = new ArrayDeque<Asteroid>();
-    private ArrayDeque<Bullet> bullets = new ArrayDeque<Bullet>();
+    private BulletManager bulletManager;
     private boolean shooting = false;
 
     private byte lifes = 0;
@@ -57,6 +55,7 @@ class GameHandler implements Keyboard.Listener {
 	initTexts();
 
 	ship = new Ship(surface);
+	bulletManager = new BulletManager(surface);
 
 	shipPolyline = Ship.shipPolyline.clone();
 
@@ -69,13 +68,9 @@ class GameHandler implements Keyboard.Listener {
 	if (!isGameOver()) {
 	    ship.paint(alpha);
 
-	    Iterator i = bullets.iterator();
-	    while (i.hasNext()) {
-		Bullet b = (Bullet)i.next();
-		b.paint(alpha);
-	    }
+	    bulletManager.paint(alpha);
 
-	    i = asteroids.iterator();
+	    Iterator i = asteroids.iterator();
 	    while (i.hasNext()) {
 		Asteroid a = (Asteroid)i.next();
 		a.paint(alpha);
@@ -134,16 +129,9 @@ class GameHandler implements Keyboard.Listener {
     public void onKeyTyped(Keyboard.TypedEvent event) {}
 
     private void updateBullets(float delta) {
-	Iterator i = bullets.iterator();
-	while (i.hasNext()) {
-	    Bullet b = (Bullet)i.next();
-	    b.update(delta);
-	    if (b.isDead())
-		i.remove();
-	}
-
+	bulletManager.update(delta);
  	if (shooting) {
-	    bullets.add(new Bullet(ship));
+	    bulletManager.addBullet(ship);
 	    shooting = false;
 	}
    }
@@ -173,21 +161,9 @@ class GameHandler implements Keyboard.Listener {
     }
 
     private void detectCollisions(float delta) {
-	Iterator i = asteroids.iterator();
-	while (i.hasNext()) {
-	    Asteroid a = (Asteroid)i.next();
-	    Iterator j = bullets.iterator();
-	    while (j.hasNext()) {
-		Bullet b = (Bullet)j.next();
-		if (!b.isDead() && a.isCollidingWith(b)) {
-		    a.die();
-		    b.die();
-		    score += 3 - a.size();
-		}
-	    }
-	}
+	score += bulletManager.detectCollisions(asteroids);
 
-	i = asteroids.iterator();
+	Iterator i = asteroids.iterator();
 
 	while (i.hasNext()) {
 	    Asteroid a = (Asteroid)i.next();
