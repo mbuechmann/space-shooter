@@ -9,9 +9,13 @@ class Asteroid extends GameElement {
     private static final float SPEED = 100f;
     private static final float MIN_ROTATION_SPEED = -90f;
     private static final float MAX_ROTATION_SPEED = 90f;
+    // time to life for debris (size=0)
+    private static float TTL = 1000f;
 
     private static final Point[][][] POINTS = {
 	{
+	    {new Point(-0.5f, -0.5f), new Point(-0.5f, 0.5f), new Point(0.5f, 0.5f), new Point(0.5f, -0.5f)}
+	}, {
 	    {new Point(-10f, 0f), new Point(-5f, 1f), new Point(-3f, 8f), new Point(5f, 8f), new Point(8f, -2f), new Point(1f, -10f), new Point(-6f, -9f)},
 	    {new Point(-10f, 8f), new Point(-7f, 10f), new Point(5f, 5f), new Point(9f, 1f), new Point(3f, -8f), new Point(-5f, -5f), new Point( -7f, 4f)},
 	    {new Point(-6f, 0f), new Point(-8f, 4f), new Point(-3f, 8f), new Point(0f, 5f), new Point(4f, 6f), new Point(6f, 2f), new Point(4f, -1f), new Point(2f, -8f), new Point(-5f, -7f)}
@@ -24,24 +28,26 @@ class Asteroid extends GameElement {
     };
     private static final Polyline[][] POLYLINES = {
 	{
-	    new Polyline(POINTS[0][0]),
-	    new Polyline(POINTS[0][1]),
-	    new Polyline(POINTS[0][2])
+	    new Polyline(POINTS[0][0])
 	}, {
 	    new Polyline(POINTS[1][0]),
-	    new Polyline(POINTS[1][1])
+	    new Polyline(POINTS[1][1]),
+	    new Polyline(POINTS[1][2])
 	}, {
-	    new Polyline(POINTS[2][0])
+	    new Polyline(POINTS[2][0]),
+	    new Polyline(POINTS[2][1])
+	}, {
+	    new Polyline(POINTS[3][0])
 	}
     };
+
     private byte size;
-
     private Polyline polyline;
-
     private boolean dead = false;
+    private float age = 0f;
 
     public Asteroid(Surface surface) {
-	this((byte)2, surface);
+	this((byte)3, surface);
     }
 
     public Asteroid(byte size, Surface surface) {
@@ -56,6 +62,18 @@ class Asteroid extends GameElement {
 	initVelocity(random);
 	initRotation(random);
 	initSound();
+    }
+
+    public Asteroid(Asteroid parent) {
+	this((byte)(parent.size - 1), parent.surface);
+	this.x = parent.x;
+	this.y = parent.y;
+	if (size == 0) {
+	    Random random = new Random();
+	    float r = random.nextFloat() * 2f + 2f;
+	    vx = (vx + parent.vx) / r;
+	    vy = (vy + parent.vy) / r;
+	}
     }
 
     public byte size() {
@@ -102,9 +120,16 @@ class Asteroid extends GameElement {
 
     public void update(float delta) {
 	updatePosition(delta);
+	if (size == 0) {
+	    age += delta;
+	    dead = age > TTL;
+	}
     }
 
     public boolean isCollidingWith(Bullet bullet) {
+	if (size == 0)
+	    return false;
+
 	return polyline.intersectsLine(
 	    (double)bullet.x(),
 	    (double)bullet.y(),
@@ -114,6 +139,9 @@ class Asteroid extends GameElement {
     }
 
     public boolean isCollidingWith(Ship ship) {
+	if (size == 0)
+	    return false;
+
 	return !dead && !ship.isDisabled() && polyline.intersectsPolyline(ship.shipPolyline);
     }
 
@@ -127,36 +155,23 @@ class Asteroid extends GameElement {
     }
 
     // Spawn two Asteroids with a smaller size or a lot of debris
-    public Asteroid[] spawnChildren() {
+    public Asteroid[] spawnChildren(AsteroidManager asteroidManager) {
 	Asteroid[] children;
-	if (size > 0)
+	if (size > 1)
 	    children = new Asteroid[2];
-	else
+	else if (size == 1)
 	    children = new Asteroid[15];
+	else
+	    children = new Asteroid[0];
 
 	for (int i = 0; i < children.length; i++)
-	    children[i] = spawnChild();
+	    children[i] = spawnChild(asteroidManager);
 
 	return children;
     }
 
-    private Asteroid spawnChild() {
-	Asteroid a = null;
-
-	if (size > 0)
-	    a = new Asteroid((byte)(size - 1), surface);
-	else {
-	    a = new Debris(surface);
-	    Random random = new Random();
-	    float r = random.nextFloat() * 2f + 2f;
-	    a.vx = (a.vx + vx) / r;
-	    a.vy = (a.vy + vy) / r;
-	}
-
-	a.x = x;
-	a.y = y;
-
-	return a;
+    private Asteroid spawnChild(AsteroidManager asteroidManager) {
+	return asteroidManager.createAsteroid(this);
     }
 
 }

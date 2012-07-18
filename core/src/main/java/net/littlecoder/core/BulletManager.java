@@ -48,10 +48,10 @@ class BulletManager {
 	}	
     }
 
-    public int detectCollisions(ArrayDeque<Asteroid> asteroids) {
+    public int detectCollisions(AsteroidManager asteroidManager) {
 	int score = 0;
 
-	Iterator i = asteroids.iterator();
+	Iterator i = asteroidManager.asteroids().iterator();
 	while (i.hasNext()) {
 	    Asteroid a = (Asteroid)i.next();
 	    Iterator j = activeBullets.iterator();

@@ -27,8 +27,9 @@ class GameHandler implements Keyboard.Listener {
     private Surface surface;
 
     private Ship ship;
-    private ArrayDeque<Asteroid> asteroids = new ArrayDeque<Asteroid>();
     private BulletManager bulletManager;
+    private AsteroidManager asteroidManager;
+
     private boolean shooting = false;
 
     private byte lifes = 0;
@@ -56,6 +57,7 @@ class GameHandler implements Keyboard.Listener {
 
 	ship = new Ship(surface);
 	bulletManager = new BulletManager(surface);
+	asteroidManager = new AsteroidManager(surface);
 
 	shipPolyline = Ship.shipPolyline.clone();
 
@@ -69,12 +71,7 @@ class GameHandler implements Keyboard.Listener {
 	    ship.paint(alpha);
 
 	    bulletManager.paint(alpha);
-
-	    Iterator i = asteroids.iterator();
-	    while (i.hasNext()) {
-		Asteroid a = (Asteroid)i.next();
-		a.paint(alpha);
-	    }
+	    asteroidManager.paint(alpha);
 
 	    for (int l = 0; l < lifes; l++)
 		shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
@@ -88,9 +85,9 @@ class GameHandler implements Keyboard.Listener {
 
     public void update(float delta) {
 	if (!isGameOver()) {
-	    updateShip(delta);
+	    ship.update(delta);
 	    updateBullets(delta);
-	    updateAsteroids(delta);
+	    asteroidManager.update(delta);
 	    detectCollisions(delta);
 	    advanceLevel(delta);
 	} else
@@ -136,42 +133,12 @@ class GameHandler implements Keyboard.Listener {
 	}
    }
 
-    private void updateShip(float delta) {
-	ship.update(delta);
-    }
-
-    private void updateAsteroids(float delta) {
-	ArrayDeque<Asteroid> newAsteroids = new ArrayDeque<Asteroid>();
-
-	Iterator i = asteroids.iterator();
-	while (i.hasNext()) {
-	    Asteroid a = (Asteroid)i.next();
-	    if (a.isDead()) {
-		Asteroid[] children = a.spawnChildren();
-		for (Asteroid c : children)
-		    newAsteroids.add(c);
-		i.remove();
-	    } else
-		a.update(delta);
-	}
-
-	i = newAsteroids.iterator();
-	while (i.hasNext())
-	    asteroids.add((Asteroid)i.next());
-    }
-
     private void detectCollisions(float delta) {
-	score += bulletManager.detectCollisions(asteroids);
+	score += bulletManager.detectCollisions(asteroidManager);
 
-	Iterator i = asteroids.iterator();
-
-	while (i.hasNext()) {
-	    Asteroid a = (Asteroid)i.next();
-	    if (a.isCollidingWith(ship)) {
-		ship.die();
-		lifes--;
-		break;
-	    }
+	if (asteroidManager.isCollidingWith(ship)) {
+	    ship.die();
+	    lifes--;
 	}
     }
 
@@ -203,7 +170,7 @@ class GameHandler implements Keyboard.Listener {
 	levelImage.canvas().drawText(layout, 0, 0);
 	surface.drawImage(levelImage, surface.width() / 2f - layout.width(), 10f);
 
-	if (asteroids.isEmpty() && !isGameOver()) {
+	if (asteroidManager.isEmpty() && !isGameOver()) {
 	    text = "Next Level in\n\n" + (int)Math.ceil(timeToNextLevel / 1000) + " Sec";
 	    layout = graphics().layoutText(text, smallTextFormat);
 	    nextLevelImage.canvas().clear();
@@ -261,13 +228,11 @@ class GameHandler implements Keyboard.Listener {
 	    score = 0;
 	}
 
-	asteroids.clear();
-	for (int i = 0; i < level + 2; i++)
-	    asteroids.add(new Asteroid((byte)2, surface));
+	asteroidManager.initLevel(level);
     }
 
     private void advanceLevel(float delta) {
-	if (asteroids.isEmpty()) {
+	if (asteroidManager.isEmpty()) {
 	    timeToNextLevel -= delta;
 	    if (timeToNextLevel < 0f) {
 		level++;
