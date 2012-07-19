@@ -1,3 +1,4 @@
+
 package net.littlecoder.core;
 
 import java.util.ArrayDeque;
@@ -15,6 +16,7 @@ class AsteroidManager {
 	this.surface = surface;
 	activeAsteroids = new ArrayDeque<Asteroid>();
 	inactiveAsteroids = new ArrayDeque<Asteroid>();
+	SoundPlayer.loadSound("Die");
     }
 
     public void initLevel(int level) {
@@ -22,16 +24,30 @@ class AsteroidManager {
 	    activeAsteroids.add(new Asteroid(surface));
     }
 
-    public Asteroid createAsteroid() {
-	return new Asteroid(surface);
-    }
-
     public Asteroid createAsteroid(byte size) {
-	return new Asteroid(size, surface);
+	Asteroid res;
+
+	if (inactiveAsteroids.isEmpty())
+	    res = new Asteroid(size, surface);
+	else {
+	    res = inactiveAsteroids.removeFirst();
+	    res.reinitialize(size);
+	}
+	    
+	return res;
     }
 
     public Asteroid createAsteroid(Asteroid parent) {
-	return new Asteroid(parent);
+	Asteroid res;
+
+	if (inactiveAsteroids.isEmpty())
+	    res = new Asteroid(parent);
+	else {
+	    res = inactiveAsteroids.removeFirst();
+	    res.reinitialize(parent);
+	}
+	    
+	return res;
     }
 
     public void paint(float alpha) {
@@ -52,6 +68,7 @@ class AsteroidManager {
 		Asteroid[] children = a.spawnChildren(this);
 		for (Asteroid c : children)
 		    newAsteroids.add(c);
+		inactiveAsteroids.add(a);
 		i.remove();
 	    } else
 		a.update(delta);

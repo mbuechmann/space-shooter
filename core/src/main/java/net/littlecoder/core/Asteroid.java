@@ -43,8 +43,8 @@ class Asteroid extends GameElement {
 
     private byte size;
     private Polyline polyline;
-    private boolean dead = false;
-    private float age = 0f;
+    private boolean dead;
+    private float age;
 
     public Asteroid(Surface surface) {
 	this((byte)3, surface);
@@ -52,20 +52,30 @@ class Asteroid extends GameElement {
 
     public Asteroid(byte size, Surface surface) {
 	super(surface);
+	reinitialize(size);
+    }
+
+    public Asteroid(Asteroid parent) {
+	super(parent.surface);
+	reinitialize(parent);
+    }
+
+    public void reinitialize(byte size) {
 	this.size = size;
-	
+	dead = false;
+	age = 0f;
+
 	// Randomly initialize this Asteroid
 	Random random = new Random();
-
 	initPolyline(random);
 	initPosition(random);
 	initVelocity(random);
 	initRotation(random);
-	initSound();
     }
 
-    public Asteroid(Asteroid parent) {
-	this((byte)(parent.size - 1), parent.surface);
+    public void reinitialize(Asteroid parent) {
+	reinitialize((byte)(parent.size - 1));
+
 	this.x = parent.x;
 	this.y = parent.y;
 	if (size == 0) {
@@ -108,10 +118,6 @@ class Asteroid extends GameElement {
 	vrot = (float)Math.toRadians(
 	    MIN_ROTATION_SPEED + random.nextFloat() * (MAX_ROTATION_SPEED - MIN_ROTATION_SPEED)
         );
-    }
-
-    private void initSound() {
-	SoundPlayer.loadSound("Die");
     }
 
     public void paint(float alpha) {
