@@ -47,9 +47,8 @@ class BulletManager {
     public int detectCollisions(AsteroidManager asteroidManager) {
 	int score = 0;
 
-	Iterator i = asteroidManager.asteroids().iterator();
-	while (i.hasNext()) {
-	    Asteroid a = (Asteroid)i.next();
+	for (int i = 0; i < asteroidManager.asteroids().size(); i++) {
+	    Asteroid a = asteroidManager.asteroids().get(i);
 	    for (int j = 0; j < active.size(); j++) {
 		Bullet b = active.get(j);
 		if (!b.isDead() && a.isCollidingWith(b)) {

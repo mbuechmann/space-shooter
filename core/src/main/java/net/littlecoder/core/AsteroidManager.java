@@ -1,36 +1,35 @@
 
 package net.littlecoder.core;
 
-import java.util.ArrayDeque;
-import java.util.Iterator;
+import java.util.ArrayList;
 
 import playn.core.Surface;
 
 class AsteroidManager {
 
     private Surface surface;
-    private ArrayDeque<Asteroid> activeAsteroids;
-    private ArrayDeque<Asteroid> inactiveAsteroids;
+    private ArrayList<Asteroid> active;
+    private ArrayList<Asteroid> inactive;
 
     public AsteroidManager(Surface surface) {
 	this.surface = surface;
-	activeAsteroids = new ArrayDeque<Asteroid>();
-	inactiveAsteroids = new ArrayDeque<Asteroid>();
+	active = new ArrayList<Asteroid>();
+	inactive = new ArrayList<Asteroid>();
 	SoundPlayer.loadSound("Die");
     }
 
     public void initLevel(int level) {
 	for (int i = 0; i < level + 2; i++)
-	    activeAsteroids.add(new Asteroid(surface));
+	    active.add(new Asteroid(surface));
     }
 
     public Asteroid createAsteroid(byte size) {
 	Asteroid res;
 
-	if (inactiveAsteroids.isEmpty())
+	if (inactive.isEmpty())
 	    res = new Asteroid(size, surface);
 	else {
-	    res = inactiveAsteroids.removeFirst();
+	    res = inactive.remove(0);
 	    res.reinitialize(size);
 	}
 	    
@@ -40,10 +39,10 @@ class AsteroidManager {
     public Asteroid createAsteroid(Asteroid parent) {
 	Asteroid res;
 
-	if (inactiveAsteroids.isEmpty())
+	if (inactive.isEmpty())
 	    res = new Asteroid(parent);
 	else {
-	    res = inactiveAsteroids.removeFirst();
+	    res = inactive.remove(0);
 	    res.reinitialize(parent);
 	}
 	    
@@ -51,53 +50,43 @@ class AsteroidManager {
     }
 
     public void paint(float alpha) {
-	Iterator i = activeAsteroids.iterator();
-	while (i.hasNext()) {
-	    Asteroid a = (Asteroid)i.next();
-	    a.paint(alpha);
-	}
+	for (int i = 0; i < active.size(); i++)
+	    active.get(i).paint(alpha);
     }
 
     public void update(float delta) {
-    	ArrayDeque<Asteroid> newAsteroids = new ArrayDeque<Asteroid>();
+    	ArrayList<Asteroid> newAsteroids = new ArrayList<Asteroid>();
 
-	Iterator i = activeAsteroids.iterator();
-	while (i.hasNext()) {
-	    Asteroid a = (Asteroid)i.next();
+	for (int i = active.size() - 1; i >= 0; i-- ) {
+	    Asteroid a = active.get(i);
 	    if (a.isDead()) {
 		Asteroid[] children = a.spawnChildren(this);
 		for (Asteroid c : children)
 		    newAsteroids.add(c);
-		inactiveAsteroids.add(a);
-		i.remove();
+		inactive.add(a);
+		active.remove(i);
 	    } else
 		a.update(delta);
 	}
 
-	i = newAsteroids.iterator();
-	while (i.hasNext()) {
-	    Asteroid a = (Asteroid)i.next();
-	    activeAsteroids.add(a);		
-	}
+	for (int i = 0; i < newAsteroids.size(); i++)
+	    active.add(newAsteroids.get(i));
     }
 
     public boolean isCollidingWith(Ship ship) {
-	Iterator i = activeAsteroids.iterator();
-	while (i.hasNext()) {
-	    Asteroid a = (Asteroid)i.next();
-	    if (a.isCollidingWith(ship))
+	for (int i = 0; i < active.size(); i++) 
+	    if (active.get(i).isCollidingWith(ship))
 		return true;
-	}
 
 	return false;
     }
 
     public boolean isEmpty() {
-	return activeAsteroids.isEmpty();
+	return active.isEmpty();
     }
 
-    public ArrayDeque<Asteroid> asteroids() {
-	return activeAsteroids;
+    public ArrayList<Asteroid> asteroids() {
+	return active;
     }
 
 }
