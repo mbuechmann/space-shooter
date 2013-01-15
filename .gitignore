@@ -1,7 +1,10 @@
 *~
 *#
 .#*
+.idea/
 *.class
+*.iml
 core/target
 java/target
 target
+
