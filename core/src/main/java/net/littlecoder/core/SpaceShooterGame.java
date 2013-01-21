@@ -16,35 +16,35 @@ public class SpaceShooterGame implements Game {
 
     @Override
     public void init() {
-	initGraphics();
+        initGraphics();
 
-	gameHandler = new GameHandler(surface);
+        gameHandler = new GameHandler(surface);
     }
 
     @Override
     public void paint(float alpha) {
-	gameHandler.paint(alpha);
+        gameHandler.paint(alpha);
     }
 
     @Override
     public void update(float delta) {
-	gameHandler.update(delta);
+        gameHandler.update(delta);
     }
 
     @Override
     public int updateRate() {
-	return 25;
+        return 25;
     }
 
     private void initGraphics() {
-	graphics().setSize(WIDTH, HEIGHT);
+        graphics().setSize(WIDTH, HEIGHT);
 
-	SurfaceLayer surfaceLayer = graphics().createSurfaceLayer(
-	    new Integer(WIDTH).floatValue(),
-	    new Integer(HEIGHT).floatValue()
+        SurfaceLayer surfaceLayer = graphics().createSurfaceLayer(
+                new Integer(WIDTH).floatValue(),
+                new Integer(HEIGHT).floatValue()
         );
-	surface = surfaceLayer.surface();
-	graphics().rootLayer().add(surfaceLayer);
+        surface = surfaceLayer.surface();
+        graphics().rootLayer().add(surfaceLayer);
     }
 
 }

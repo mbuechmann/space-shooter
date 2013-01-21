@@ -7,9 +7,9 @@ import net.littlecoder.core.SpaceShooterGame;
 
 public class SpaceShooterGameActivity extends GameActivity {
 
-  @Override
-  public void main(){
-    platform().assets().setPathPrefix("net/littlecoder/resources");
-    PlayN.run(new SpaceShooterGame());
-  }
+    @Override
+    public void main() {
+        platform().assets().setPathPrefix("net/littlecoder/resources");
+        PlayN.run(new SpaceShooterGame());
+    }
 }

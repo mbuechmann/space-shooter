@@ -13,56 +13,56 @@ class Bullet extends GameElement {
     private boolean dead;
 
     public Bullet(Ship ship) {
-	super(ship.surface);
-	reinitialize(ship);
+        super(ship.surface);
+        reinitialize(ship);
     }
 
     public void reinitialize(Ship ship) {
-	x = ship.tipX();
-	y = ship.tipY();
-	lastX = x;
-	lastY = y;
-	vx = -(float)Math.sin(ship.rot()) * SPEED;
-	vy = -(float)Math.cos(ship.rot()) * SPEED;
-	dead = false;
-	age = 0f;
+        x = ship.tipX();
+        y = ship.tipY();
+        lastX = x;
+        lastY = y;
+        vx = -(float) Math.sin(ship.rot()) * SPEED;
+        vy = -(float) Math.cos(ship.rot()) * SPEED;
+        dead = false;
+        age = 0f;
 
-	SoundPlayer.playSound("Lazer");
+        SoundPlayer.playSound("Lazer");
     }
 
     public void update(float delta) {
-	lastX = x;
-	lastY = y;
-	updatePosition(delta);
-	age += delta;
+        lastX = x;
+        lastY = y;
+        updatePosition(delta);
+        age += delta;
     }
 
     public void paint(float alpha) {
-	surface.fillRect(x, y, 2f, 2f);
+        surface.fillRect(x, y, 2f, 2f);
     }
 
     public void die() {
-	dead = true;
+        dead = true;
     }
 
     public boolean isDead() {
-	return dead || age > TTL;
+        return dead || age > TTL;
     }
 
     public float x() {
-	return x;
+        return x;
     }
 
     public float y() {
-	return y;
+        return y;
     }
 
     public float lastX() {
-	return lastX;
+        return lastX;
     }
 
     public float lastY() {
-	return lastY;
+        return lastY;
     }
 
 }

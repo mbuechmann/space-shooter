@@ -10,25 +10,25 @@ import playn.core.TextLayout;
 class ImageHelper {
 
     public static CanvasImage createTextImage(
-	String text, 
-	Font font, 
-	TextFormat.Alignment alignment, 
-	int color
+            String text,
+            Font font,
+            TextFormat.Alignment alignment,
+            int color
     ) {
-	TextFormat format = new TextFormat().
-	    withFont(font).
-	    withAlignment(alignment).
-	    withTextColor(color);
+        TextFormat format = new TextFormat().
+                withFont(font).
+                withAlignment(alignment).
+                withTextColor(color);
 
-	TextLayout layout = graphics().layoutText(text, format);
+        TextLayout layout = graphics().layoutText(text, format);
 
-	CanvasImage res = graphics().createImage(
-	    (int)Math.ceil(layout.width()),
-	    (int)Math.ceil(layout.height())
+        CanvasImage res = graphics().createImage(
+                (int) Math.ceil(layout.width()),
+                (int) Math.ceil(layout.height())
         );
-	res.canvas().drawText(layout, 0, 0);
+        res.canvas().drawText(layout, 0, 0);
 
-	return res;
+        return res;
     }
 
 }

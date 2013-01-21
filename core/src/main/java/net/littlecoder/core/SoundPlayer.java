@@ -10,35 +10,35 @@ import playn.core.Sound;
 
 class SoundPlayer {
 
-    private static HashMap<String, ArrayDeque<Sound>> soundQueues = 
-	new HashMap<String, ArrayDeque<Sound>>();
+    private static HashMap<String, ArrayDeque<Sound>> soundQueues =
+            new HashMap<String, ArrayDeque<Sound>>();
 
     public static void loadSound(String filename) {
-	if (soundQueues.get(filename) == null) {
-	    ArrayDeque<Sound> queue = new ArrayDeque<Sound>();
-	    Sound sound = assets().getSound("sounds/" + filename);
-	    queue.add(sound);
-	    soundQueues.put(filename, queue);
-	}
+        if (soundQueues.get(filename) == null) {
+            ArrayDeque<Sound> queue = new ArrayDeque<Sound>();
+            Sound sound = assets().getSound("sounds/" + filename);
+            queue.add(sound);
+            soundQueues.put(filename, queue);
+        }
     }
 
     public static void playSound(String filename) {
-	if (soundQueues.get(filename) == null)
-	    loadSound(filename);
+        if (soundQueues.get(filename) == null)
+            loadSound(filename);
 
-	ArrayDeque<Sound> queue = soundQueues.get(filename);
-	Sound s;
-	if (queue.getFirst().isPlaying())
-	    s = getSound(filename);
-	else
-	    s = queue.remove();
+        ArrayDeque<Sound> queue = soundQueues.get(filename);
+        Sound s;
+        if (queue.getFirst().isPlaying())
+            s = getSound(filename);
+        else
+            s = queue.remove();
 
-	s.play();
-	queue.add(s);
+        s.play();
+        queue.add(s);
     }
 
     public static Sound getSound(String filename) {
-	return assets().getSound("sounds/" + filename);
+        return assets().getSound("sounds/" + filename);
     }
 
 }

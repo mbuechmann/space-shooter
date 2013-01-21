@@ -12,7 +12,7 @@ class Ship extends GameElement {
     // rotation in radians per second
     private static final float MAX_SPEED = 400f;
     private static final float ACCELERATION = 500f;
-    private static final float ROTATION_SPEED = (float)Math.toRadians(180f);
+    private static final float ROTATION_SPEED = (float) Math.toRadians(180f);
     private static final float TTD = 3000f;
 
     private boolean accelerating = false;
@@ -38,135 +38,135 @@ class Ship extends GameElement {
 
     // The remains of the ship when it is destroyed
     private Remains[] remains;
-    
-    public Ship (Surface surface) {
-	super(surface);
-	reinitialize();
-	initSounds();
+
+    public Ship(Surface surface) {
+        super(surface);
+        reinitialize();
+        initSounds();
     }
 
     public void reinitialize() {
-	x = surface.width() / 2f;
-	y = surface.height() / 2f;
-	vx = 0f;
-	vy = 0f;
-	rot = 0f;
-	vrot = 0f;
-	dying = false;
-	age = 0f;
+        x = surface.width() / 2f;
+        y = surface.height() / 2f;
+        vx = 0f;
+        vy = 0f;
+        rot = 0f;
+        vrot = 0f;
+        dying = false;
+        age = 0f;
     }
 
     public float tipX() {
-	return shipTop.x;
+        return shipTop.x;
     }
 
     public float tipY() {
-	return shipTop.y;
+        return shipTop.y;
     }
 
     public float rot() {
-	return rot;
+        return rot;
     }
 
     public Surface surface() {
-	return surface;
+        return surface;
     }
 
     public void paint(float alpha) {
-	if (!dying) {
-	    surface.setFillColor(0xFFFFFF);
-	    shipPolyline.transform(rot, x, y).paint(surface);
-	    if (accelerating && !dying)
-		thrusterPolyline.transform(rot, x, y).paint(surface);
-	} else if (!isDead())
-	    for (Remains r : remains)
-		r.paint(alpha);
+        if (!dying) {
+            surface.setFillColor(0xFFFFFF);
+            shipPolyline.transform(rot, x, y).paint(surface);
+            if (accelerating && !dying)
+                thrusterPolyline.transform(rot, x, y).paint(surface);
+        } else if (!isDead())
+            for (Remains r : remains)
+                r.paint(alpha);
     }
 
     public void accelerate(boolean on) {
-	accelerating = on;
+        accelerating = on;
     }
 
     public void steerRight(boolean on) {
-	steeringRight = on;
+        steeringRight = on;
     }
 
     public void steerLeft(boolean on) {
-	steeringLeft = on;
+        steeringLeft = on;
     }
 
     public void update(float delta) {
-	if (!dying) {
-	    regardPiloting(delta);
-	    limitVelocity();
-	    updatePosition(delta);
-	} else {
-    	    progressDeath(delta);
-	    for (Remains r : remains)
-		r.update(delta);
-	}
+        if (!dying) {
+            regardPiloting(delta);
+            limitVelocity();
+            updatePosition(delta);
+        } else {
+            progressDeath(delta);
+            for (Remains r : remains)
+                r.update(delta);
+        }
     }
 
     public void die() {
-	initRemains();
-	engineSound.stop();
-	dieSound.play();
-	dying = true;
+        initRemains();
+        engineSound.stop();
+        dieSound.play();
+        dying = true;
     }
 
     public boolean isDead() {
-	return (age >= TTD);
+        return (age >= TTD);
     }
 
     public boolean isDisabled() {
-	return dying;
+        return dying;
     }
 
     private void regardPiloting(float delta) {
-	if (accelerating) {
-	    vx -= Math.sin(rot) * delta/1000f * ACCELERATION;
-	    vy -= Math.cos(rot) * delta/1000f * ACCELERATION;
-	}
+        if (accelerating) {
+            vx -= Math.sin(rot) * delta / 1000f * ACCELERATION;
+            vy -= Math.cos(rot) * delta / 1000f * ACCELERATION;
+        }
 
-	vrot = 0f;
-	if (steeringRight)
-	    vrot -=  ROTATION_SPEED;
-	if (steeringLeft)
-	    vrot += ROTATION_SPEED;
+        vrot = 0f;
+        if (steeringRight)
+            vrot -= ROTATION_SPEED;
+        if (steeringLeft)
+            vrot += ROTATION_SPEED;
 
-	if (accelerating != engineSound.isPlaying()) {
-	    if (accelerating)
-		engineSound.play();
-	    else
-		engineSound.stop();
-	}
+        if (accelerating != engineSound.isPlaying()) {
+            if (accelerating)
+                engineSound.play();
+            else
+                engineSound.stop();
+        }
     }
 
     private void limitVelocity() {
-	float v = (float)Math.sqrt(vx * vx + vy * vy);
-	if (v > MAX_SPEED) {
-	    float factor = v / MAX_SPEED;
-	    vx /= factor;
-	    vy /= factor;
-	}
+        float v = (float) Math.sqrt(vx * vx + vy * vy);
+        if (v > MAX_SPEED) {
+            float factor = v / MAX_SPEED;
+            vx /= factor;
+            vy /= factor;
+        }
     }
 
     private void progressDeath(float delta) {
-	age += delta;
+        age += delta;
     }
 
     private void initSounds() {
-	engineSound = SoundPlayer.getSound("Engines");
-	engineSound.setLooping(true);
-	dieSound = SoundPlayer.getSound("Die 2");
+        engineSound = SoundPlayer.getSound("Engines");
+        engineSound.setLooping(true);
+        dieSound = SoundPlayer.getSound("Die 2");
     }
 
     private void initRemains() {
-	remains = new Remains[4];
-	remains[0] = new Remains(new Line(shipTop, shipRight), surface, x, y, vx, vy, rot);
-	remains[1] = new Remains(new Line(shipRight, shipBottom), surface, x, y, vx, vy, rot);
-	remains[2] = new Remains(new Line(shipBottom, shipLeft), surface, x, y, vx, vy, rot);
-	remains[3] = new Remains(new Line(shipLeft, shipTop), surface, x, y, vx, vy, rot);
+        remains = new Remains[4];
+        remains[0] = new Remains(new Line(shipTop, shipRight), surface, x, y, vx, vy, rot);
+        remains[1] = new Remains(new Line(shipRight, shipBottom), surface, x, y, vx, vy, rot);
+        remains[2] = new Remains(new Line(shipBottom, shipLeft), surface, x, y, vx, vy, rot);
+        remains[3] = new Remains(new Line(shipLeft, shipTop), surface, x, y, vx, vy, rot);
     }
 
 }

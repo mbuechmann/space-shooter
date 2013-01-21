@@ -8,10 +8,10 @@ import net.littlecoder.core.SpaceShooterGame;
 
 public class SpaceShooterGameHtml extends HtmlGame {
 
-  @Override
-  public void start() {
-    HtmlPlatform platform = HtmlPlatform.register();
-    platform.assets().setPathPrefix("shooter/");
-    PlayN.run(new SpaceShooterGame());
-  }
+    @Override
+    public void start() {
+        HtmlPlatform platform = HtmlPlatform.register();
+        platform.assets().setPathPrefix("shooter/");
+        PlayN.run(new SpaceShooterGame());
+    }
 }
