@@ -4,8 +4,6 @@ import static playn.core.PlayN.*;
 
 import playn.core.Game;
 import playn.core.ImmediateLayer;
-import playn.core.Surface;
-import playn.core.SurfaceLayer;
 
 public class SpaceShooterGame implements Game {
 
