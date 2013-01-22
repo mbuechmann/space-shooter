@@ -6,7 +6,7 @@ import static net.littlecoder.core.ImageHelper.*;
 
 import playn.core.*;
 
-// TODO: Move rerendering of dynamic texts to ImageHelper
+// TODO: Move rendering of dynamic texts to ImageHelper
 // TODO: Move Game Over part to single class
 class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
 
