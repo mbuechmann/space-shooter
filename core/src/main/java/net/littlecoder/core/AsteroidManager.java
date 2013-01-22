@@ -26,19 +26,6 @@ class AsteroidManager {
             active.add(new Asteroid(width, height));
     }
 
-    public Asteroid createAsteroid(Asteroid parent) {
-        Asteroid res;
-
-        if (inactive.isEmpty())
-            res = new Asteroid(parent);
-        else {
-            res = inactive.remove(0);
-            res.reinitialize(parent);
-        }
-
-        return res;
-    }
-
     public void paint(Surface surface) {
         for (int i = 0; i < active.size(); i++)
             active.get(i).paint(surface);
@@ -50,7 +37,7 @@ class AsteroidManager {
         for (int i = active.size() - 1; i >= 0; i--) {
             Asteroid a = active.get(i);
             if (a.isDead()) {
-                Asteroid[] children = a.spawnChildren(this);
+                Asteroid[] children = a.spawnChildren();
                 for (Asteroid c : children)
                    newAsteroids.add(c);
                 inactive.add(a);

@@ -168,7 +168,7 @@ class Asteroid extends GameElement {
     }
 
     // Spawn two Asteroids with a smaller size or a lot of debris
-    public Asteroid[] spawnChildren(AsteroidManager asteroidManager) {
+    public Asteroid[] spawnChildren() {
         Asteroid[] children;
         if (size > 1)
             children = new Asteroid[2];
@@ -178,13 +178,9 @@ class Asteroid extends GameElement {
             children = new Asteroid[0];
 
         for (int i = 0; i < children.length; i++)
-            children[i] = spawnChild(asteroidManager);
+            children[i] = new Asteroid(this);
 
         return children;
-    }
-
-    private Asteroid spawnChild(AsteroidManager asteroidManager) {
-        return asteroidManager.createAsteroid(this);
     }
 
 }
