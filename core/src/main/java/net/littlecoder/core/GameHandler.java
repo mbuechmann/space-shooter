@@ -4,9 +4,6 @@ import static playn.core.PlayN.*;
 
 import static net.littlecoder.core.ImageHelper.*;
 
-import java.util.ArrayDeque;
-import java.util.Iterator;
-
 import playn.core.CanvasImage;
 import playn.core.Font;
 import playn.core.Key;
@@ -37,7 +34,6 @@ class GameHandler implements Keyboard.Listener {
     private int level = 0;
 
     private TextFormat smallTextFormat;
-    private TextFormat largeTextFormat;
     private CanvasImage scoreImage;
     private CanvasImage levelImage;
     private CanvasImage nextLevelImage;
@@ -56,7 +52,7 @@ class GameHandler implements Keyboard.Listener {
         initTexts();
 
         ship = new Ship(surface);
-        bulletManager = new BulletManager(surface);
+        bulletManager = new BulletManager();
         asteroidManager = new AsteroidManager(surface);
 
         shipPolyline = Ship.shipPolyline.clone();

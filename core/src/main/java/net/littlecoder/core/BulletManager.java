@@ -10,10 +10,7 @@ class BulletManager {
     private ArrayList<Bullet> active;
     private ArrayList<Bullet> inactive;
 
-    private Surface surface;
-
-    public BulletManager(Surface surface) {
-        this.surface = surface;
+    public BulletManager() {
         active = new ArrayList<Bullet>();
         inactive = new ArrayList<Bullet>();
     }
