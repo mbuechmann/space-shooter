@@ -10,14 +10,19 @@ class BulletManager {
     private ArrayList<Bullet> active;
     private ArrayList<Bullet> inactive;
 
-    public BulletManager() {
+    private int width;
+    private int height;
+
+    public BulletManager(int width, int height) {
+        this.width = width;
+        this.height = height;
         active = new ArrayList<Bullet>();
         inactive = new ArrayList<Bullet>();
     }
 
     public void addBullet(Ship ship) {
         if (inactive.isEmpty())
-            active.add(new Bullet(ship));
+            active.add(new Bullet(ship, width, height));
         else {
             Bullet b = inactive.remove(0);
             b.reinitialize(ship);
@@ -25,9 +30,9 @@ class BulletManager {
         }
     }
 
-    public void paint(float alpha) {
+    public void paint(Surface surface) {
         for (int i = 0; i < active.size(); i++)
-            active.get(i).paint(alpha);
+            active.get(i).paint(surface);
     }
 
     public void update(float delta) {

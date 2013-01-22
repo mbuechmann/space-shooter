@@ -12,6 +12,9 @@ class Asteroid extends GameElement {
     // time to life for debris (size=0)
     private static float TTL = 1000f;
 
+    private int width;
+    private int height;
+
     private static final Point[][][] POINTS = {
             {
                     {new Point(-0.5f, -0.5f), new Point(-0.5f, 0.5f), new Point(0.5f, 0.5f), new Point(0.5f, -0.5f)}
@@ -46,17 +49,21 @@ class Asteroid extends GameElement {
     private boolean dead;
     private float age;
 
-    public Asteroid(Surface surface) {
-        this((byte) 3, surface);
+    public Asteroid(int width, int height) {
+        this(width, height, (byte) 3);
     }
 
-    public Asteroid(byte size, Surface surface) {
-        super(surface);
+    public Asteroid(int width, int height, byte size) {
+        super();
+        this.width = width;
+        this.height = height;
         reinitialize(size);
     }
 
     public Asteroid(Asteroid parent) {
-        super(parent.surface);
+        super();
+        this.width = parent.width;
+        this.height = parent.height;
         reinitialize(parent);
     }
 
@@ -97,13 +104,13 @@ class Asteroid extends GameElement {
 
     private void initPosition(Random random) {
         do {
-            x = random.nextFloat() * surface.width();
-            y = random.nextFloat() * surface.height();
+            x = random.nextFloat() * width;
+            y = random.nextFloat() * height;
         } while (
-                x > (surface.width() / 3f) &&
-                        x < (surface.width() / 3f * 2f) &&
-                        y > (surface.height() / 3f) &&
-                        y < (surface.height() / 3f * 2f)
+                x > (width / 3f) &&
+                        x < (width / 3f * 2f) &&
+                        y > (height / 3f) &&
+                        y < (height / 3f * 2f)
                 );
     }
 
@@ -120,12 +127,12 @@ class Asteroid extends GameElement {
         );
     }
 
-    public void paint(float alpha) {
+    public void paint(Surface surface) {
         polyline.transform(rot, x, y).paint(surface);
     }
 
     public void update(float delta) {
-        updatePosition(delta);
+        updatePosition(delta, width, height);
         if (size == 0) {
             age += delta;
             dead = age > TTL;

@@ -15,6 +15,9 @@ class Ship extends GameElement {
     private static final float ROTATION_SPEED = (float) Math.toRadians(180f);
     private static final float TTD = 3000f;
 
+    private int width;
+    private int height;
+
     private boolean accelerating = false;
     private boolean steeringRight = false;
     private boolean steeringLeft = false;
@@ -39,15 +42,16 @@ class Ship extends GameElement {
     // The remains of the ship when it is destroyed
     private Remains[] remains;
 
-    public Ship(Surface surface) {
-        super(surface);
-        reinitialize();
+    public Ship(int width, int height) {
+        this.width = width;
+        this.height = height;
+        reinitialize(width, height);
         initSounds();
     }
 
-    public void reinitialize() {
-        x = surface.width() / 2f;
-        y = surface.height() / 2f;
+    public void reinitialize(int width, int height) {
+        x = width / 2f;
+        y = height / 2f;
         vx = 0f;
         vy = 0f;
         rot = 0f;
@@ -68,11 +72,7 @@ class Ship extends GameElement {
         return rot;
     }
 
-    public Surface surface() {
-        return surface;
-    }
-
-    public void paint(float alpha) {
+    public void paint(Surface surface) {
         if (!dying) {
             surface.setFillColor(0xFFFFFF);
             shipPolyline.transform(rot, x, y).paint(surface);
@@ -80,7 +80,7 @@ class Ship extends GameElement {
                 thrusterPolyline.transform(rot, x, y).paint(surface);
         } else if (!isDead())
             for (Remains r : remains)
-                r.paint(alpha);
+                r.paint(surface);
     }
 
     public void accelerate(boolean on) {
@@ -99,7 +99,7 @@ class Ship extends GameElement {
         if (!dying) {
             regardPiloting(delta);
             limitVelocity();
-            updatePosition(delta);
+            updatePosition(delta, width, height);
         } else {
             progressDeath(delta);
             for (Remains r : remains)
@@ -163,10 +163,10 @@ class Ship extends GameElement {
 
     private void initRemains() {
         remains = new Remains[4];
-        remains[0] = new Remains(new Line(shipTop, shipRight), surface, x, y, vx, vy, rot);
-        remains[1] = new Remains(new Line(shipRight, shipBottom), surface, x, y, vx, vy, rot);
-        remains[2] = new Remains(new Line(shipBottom, shipLeft), surface, x, y, vx, vy, rot);
-        remains[3] = new Remains(new Line(shipLeft, shipTop), surface, x, y, vx, vy, rot);
+        remains[0] = new Remains(new Line(shipTop, shipRight), x, y, vx, vy, rot, width, height);
+        remains[1] = new Remains(new Line(shipRight, shipBottom), x, y, vx, vy, rot, width, height);
+        remains[2] = new Remains(new Line(shipBottom, shipLeft), x, y, vx, vy, rot, width, height);
+        remains[3] = new Remains(new Line(shipLeft, shipTop), x, y, vx, vy, rot, width, height);
     }
 
 }

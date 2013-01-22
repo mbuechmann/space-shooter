@@ -1,5 +1,7 @@
 package net.littlecoder.core;
 
+import playn.core.Surface;
+
 class Bullet extends GameElement {
 
     // speed in pixels per second, time to live in milliseconds
@@ -12,8 +14,13 @@ class Bullet extends GameElement {
     private float age;
     private boolean dead;
 
-    public Bullet(Ship ship) {
-        super(ship.surface);
+    private int width;
+    private int height;
+
+    public Bullet(Ship ship, int width, int height) {
+        super();
+        this.width = width;
+        this.height = height;
         reinitialize(ship);
     }
 
@@ -33,11 +40,11 @@ class Bullet extends GameElement {
     public void update(float delta) {
         lastX = x;
         lastY = y;
-        updatePosition(delta);
+        updatePosition(delta, width, height);
         age += delta;
     }
 
-    public void paint(float alpha) {
+    public void paint(Surface surface) {
         surface.fillRect(x, y, 2f, 2f);
     }
 

@@ -12,24 +12,21 @@ class GameElement {
     protected float rot = 0f;
     protected float vrot = 0f;
 
-    protected Surface surface;
-
-    public GameElement(Surface surface) {
-        this.surface = surface;
+    public GameElement() {
     }
 
-    protected void updatePosition(float delta) {
+    protected void updatePosition(float delta, int width, int height) {
         x += vx * (delta / 1000f);
         y += vy * (delta / 1000f);
 
         while (x < 0)
-            x += surface.width();
-        while (x > surface.width())
-            x -= surface.width();
+            x += width;
+        while (x > width)
+            x -= width;
         while (y < 0)
-            y += surface.height();
-        while (y > surface.height())
-            y -= surface.height();
+            y += height;
+        while (y > height)
+            y -= height;
 
         rot += (delta / 1000f) * vrot;
     }

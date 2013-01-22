@@ -7,12 +7,15 @@ import playn.core.Surface;
 
 class AsteroidManager {
 
-    private Surface surface;
     private ArrayList<Asteroid> active;
     private ArrayList<Asteroid> inactive;
 
-    public AsteroidManager(Surface surface) {
-        this.surface = surface;
+    private int width;
+    private int height;
+
+    public AsteroidManager(int width, int height) {
+        this.width = width;
+        this.height = height;
         active = new ArrayList<Asteroid>();
         inactive = new ArrayList<Asteroid>();
         SoundPlayer.loadSound("Die");
@@ -20,20 +23,7 @@ class AsteroidManager {
 
     public void initLevel(int level) {
         for (int i = 0; i < level + 2; i++)
-            active.add(new Asteroid(surface));
-    }
-
-    public Asteroid createAsteroid(byte size) {
-        Asteroid res;
-
-        if (inactive.isEmpty())
-            res = new Asteroid(size, surface);
-        else {
-            res = inactive.remove(0);
-            res.reinitialize(size);
-        }
-
-        return res;
+            active.add(new Asteroid(width, height));
     }
 
     public Asteroid createAsteroid(Asteroid parent) {
@@ -49,9 +39,9 @@ class AsteroidManager {
         return res;
     }
 
-    public void paint(float alpha) {
+    public void paint(Surface surface) {
         for (int i = 0; i < active.size(); i++)
-            active.get(i).paint(alpha);
+            active.get(i).paint(surface);
     }
 
     public void update(float delta) {
@@ -62,7 +52,7 @@ class AsteroidManager {
             if (a.isDead()) {
                 Asteroid[] children = a.spawnChildren(this);
                 for (Asteroid c : children)
-                    newAsteroids.add(c);
+                   newAsteroids.add(c);
                 inactive.add(a);
                 active.remove(i);
             } else

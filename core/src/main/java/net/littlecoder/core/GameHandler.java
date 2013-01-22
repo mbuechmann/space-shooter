@@ -4,24 +4,19 @@ import static playn.core.PlayN.*;
 
 import static net.littlecoder.core.ImageHelper.*;
 
-import playn.core.CanvasImage;
-import playn.core.Font;
-import playn.core.Key;
-import playn.core.Keyboard;
-import playn.core.Surface;
-import playn.core.TextFormat;
-import playn.core.TextLayout;
+import playn.core.*;
 
 // TODO: Move rerendering of dynamic texts to ImageHelper
 // TODO: Move Game Over part to single class
-class GameHandler implements Keyboard.Listener {
+class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
 
     private static final float SMALL_FONT_SIZE = 15f;
     private static final float LARGE_FONT_SIZE = 45f;
     private static final float TIME_BETWEEN_LEVELS = 3000f;
     private static final float BLINK_INTERVAL = 2000f;
 
-    private Surface surface;
+    private int width;
+    private  int height;
 
     private Ship ship;
     private BulletManager bulletManager;
@@ -46,37 +41,39 @@ class GameHandler implements Keyboard.Listener {
 
     private float blinkTime = 0f;
 
-    public GameHandler(Surface surface) {
-        this.surface = surface;
+    public GameHandler(int width, int height) {
+        this.width = width;
+        this.height = height;
 
         initTexts();
 
-        ship = new Ship(surface);
-        bulletManager = new BulletManager();
-        asteroidManager = new AsteroidManager(surface);
+        ship = new Ship(width, height);
+        bulletManager = new BulletManager(width, height);
+        asteroidManager = new AsteroidManager(width, height);
 
         shipPolyline = Ship.shipPolyline.clone();
 
         keyboard().setListener(this);
     }
 
-    public void paint(float alpha) {
+    @Override
+    public void render(Surface surface) {
         surface.clear();
 
         if (!isGameOver()) {
-            ship.paint(alpha);
+            ship.paint(surface);
 
-            bulletManager.paint(alpha);
-            asteroidManager.paint(alpha);
+            bulletManager.paint(surface);
+            asteroidManager.paint(surface);
 
             for (int l = 0; l < lifes; l++)
                 shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
 
         } else
-            paintGameOver();
+            paintGameOver(surface);
 
-        paintScore();
-        paintLevel();
+        paintScore(surface);
+        paintLevel(surface);
     }
 
     public void update(float delta) {
@@ -104,7 +101,7 @@ class GameHandler implements Keyboard.Listener {
             else if (!ship.isDead())
                 shooting = !ship.isDisabled() && true;
             else
-                ship.reinitialize();
+                ship.reinitialize(width, height);
 
         if (event.key() == Key.ESCAPE)
             System.exit(0);
@@ -139,7 +136,7 @@ class GameHandler implements Keyboard.Listener {
         }
     }
 
-    private void paintScore() {
+    private void paintScore(Surface surface) {
         String scoreText = String.valueOf(score);
         if (score < 10)
             scoreText = "0" + scoreText;
@@ -157,7 +154,7 @@ class GameHandler implements Keyboard.Listener {
         surface.drawImage(scoreImage, surface.width() - layout.width() - 10, 10f);
     }
 
-    private void paintLevel() {
+    private void paintLevel(Surface surface) {
         String text = String.valueOf(level);
         if (level < 10)
             text = "0" + text;
@@ -181,7 +178,7 @@ class GameHandler implements Keyboard.Listener {
         }
     }
 
-    private void paintGameOver() {
+    private void paintGameOver(Surface surface) {
         surface.drawImage(
                 gameOverImage,
                 (surface.width() - gameOverImage.width()) / 2f,
@@ -242,5 +239,4 @@ class GameHandler implements Keyboard.Listener {
     private boolean isGameOver() {
         return level == 0 || lifes == 0 && ship.isDead();
     }
-
 }
