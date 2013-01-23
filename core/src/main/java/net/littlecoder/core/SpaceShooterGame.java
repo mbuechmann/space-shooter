@@ -15,9 +15,9 @@ public class SpaceShooterGame implements Game {
     @Override
     public void init() {
         GameElement.setBoundaries(WIDTH, HEIGHT);
-        gameHandler = new GameHandler();
-
         graphics().setSize(WIDTH, HEIGHT);
+
+        gameHandler = new GameHandler();
         ImmediateLayer il = graphics().createImmediateLayer(
             WIDTH,
             HEIGHT,
