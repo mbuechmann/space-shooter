@@ -75,7 +75,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
             ship.update(delta);
             updateBullets(delta);
             asteroidManager.update(delta);
-            detectCollisions(delta);
+            detectCollisions();
             advanceLevel(delta);
         } else
             blinkTime = (blinkTime + delta) % BLINK_INTERVAL;
@@ -93,7 +93,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
             if (isGameOver())
                 initLevel(1);
             else if (!ship.isDead())
-                shooting = !ship.isDisabled() && true;
+                shooting = !ship.isDisabled();
             else
                 ship.reinitialize();
 
@@ -121,7 +121,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
         }
     }
 
-    private void detectCollisions(float delta) {
+    private void detectCollisions() {
         score += bulletManager.detectCollisions(asteroidManager);
 
         if (asteroidManager.isCollidingWith(ship)) {
