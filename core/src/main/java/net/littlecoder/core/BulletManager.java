@@ -25,8 +25,7 @@ class BulletManager {
     }
 
     public void paint(Surface surface) {
-        for (int i = 0; i < active.size(); i++)
-            active.get(i).paint(surface);
+        for (Bullet a : active) a.paint(surface);
     }
 
     public void update(float delta) {
@@ -45,8 +44,7 @@ class BulletManager {
 
         for (int i = 0; i < asteroidManager.asteroids().size(); i++) {
             Asteroid a = asteroidManager.asteroids().get(i);
-            for (int j = 0; j < active.size(); j++) {
-                Bullet b = active.get(j);
+            for (Bullet b : active) {
                 if (!b.isDead() && a.isCollidingWith(b)) {
                     a.die();
                     b.die();

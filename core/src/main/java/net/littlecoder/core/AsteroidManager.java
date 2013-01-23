@@ -2,6 +2,7 @@
 package net.littlecoder.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import playn.core.Surface;
 
@@ -22,8 +23,7 @@ class AsteroidManager {
     }
 
     public void paint(Surface surface) {
-        for (int i = 0; i < active.size(); i++)
-            active.get(i).paint(surface);
+        for (Asteroid a : active) a.paint(surface);
     }
 
     public void update(float delta) {
@@ -33,21 +33,19 @@ class AsteroidManager {
             Asteroid a = active.get(i);
             if (a.isDead()) {
                 Asteroid[] children = a.spawnChildren();
-                for (Asteroid c : children)
-                   newAsteroids.add(c);
+                Collections.addAll(newAsteroids, children);
                 inactive.add(a);
                 active.remove(i);
             } else
                 a.update(delta);
         }
 
-        for (int i = 0; i < newAsteroids.size(); i++)
-            active.add(newAsteroids.get(i));
+        for (Asteroid a : newAsteroids) active.add(a);
     }
 
     public boolean isCollidingWith(Ship ship) {
-        for (int i = 0; i < active.size(); i++)
-            if (active.get(i).isCollidingWith(ship))
+        for (Asteroid a : active)
+            if (a.isCollidingWith(ship))
                 return true;
 
         return false;
