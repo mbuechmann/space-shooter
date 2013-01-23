@@ -15,12 +15,10 @@ class Point extends Point2D.Float {
     }
 
     public Point transform(float angle, float translationX, float translationY) {
-        x =
-                (float) (Math.cos(angle) * originalX) +
-                        (float) (Math.sin(angle) * originalY);
-        y =
-                -(float) (Math.sin(angle) * originalX) +
-                        (float) (Math.cos(angle) * originalY);
+        x = (float) (Math.cos(angle) * originalX) +
+            (float) (Math.sin(angle) * originalY);
+        y = -(float) (Math.sin(angle) * originalX) +
+            (float) (Math.cos(angle) * originalY);
 
         x += translationX;
         y += translationY;

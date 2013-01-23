@@ -10,7 +10,7 @@ import playn.core.Sound;
 class SoundPlayer {
 
     private static HashMap<String, ArrayDeque<Sound>> soundQueues =
-            new HashMap<String, ArrayDeque<Sound>>();
+        new HashMap<String, ArrayDeque<Sound>>();
 
     public static void loadSound(String filename) {
         if (soundQueues.get(filename) == null) {

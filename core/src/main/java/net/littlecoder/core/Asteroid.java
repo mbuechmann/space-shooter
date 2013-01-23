@@ -13,32 +13,32 @@ class Asteroid extends GameElement {
     private static float TTL = 1000f;
 
     private static final Point[][][] POINTS = {
-            {
-                    {new Point(-0.5f, -0.5f), new Point(-0.5f, 0.5f), new Point(0.5f, 0.5f), new Point(0.5f, -0.5f)}
-            }, {
+        {
+            {new Point(-0.5f, -0.5f), new Point(-0.5f, 0.5f), new Point(0.5f, 0.5f), new Point(0.5f, -0.5f)}
+        }, {
             {new Point(-10f, 0f), new Point(-5f, 1f), new Point(-3f, 8f), new Point(5f, 8f), new Point(8f, -2f), new Point(1f, -10f), new Point(-6f, -9f)},
             {new Point(-10f, 8f), new Point(-7f, 10f), new Point(5f, 5f), new Point(9f, 1f), new Point(3f, -8f), new Point(-5f, -5f), new Point(-7f, 4f)},
             {new Point(-6f, 0f), new Point(-8f, 4f), new Point(-3f, 8f), new Point(0f, 5f), new Point(4f, 6f), new Point(6f, 2f), new Point(4f, -1f), new Point(2f, -8f), new Point(-5f, -7f)}
-    }, {
+        }, {
             {new Point(-9f, 0f), new Point(-15f, 5f), new Point(-13f, 9f), new Point(-5f, 15f), new Point(0f, 11f), new Point(5f, 14f), new Point(10f, 10f), new Point(15f, -2f), new Point(5f, -15f), new Point(-12f, -14f), new Point(-15f, -5f)},
             {new Point(-14f, 5f), new Point(-6f, 14f), new Point(-1f, 10f), new Point(1f, 13f), new Point(5f, 10f), new Point(10f, 10f), new Point(14f, -3f), new Point(7f, -8f), new Point(0f, -11f), new Point(-4f, -13f), new Point(-12f, -12f), new Point(-10f, -3f)}
-    }, {
+        }, {
             {new Point(-18f, 0f), new Point(-15f, 10f), new Point(-3f, 12f), new Point(0f, 20f), new Point(7f, 16f), new Point(15f, 14f), new Point(20f, 0f), new Point(18f, -3f), new Point(15f, -10f), new Point(8f, -12f), new Point(0f, -15f), new Point(-2f, -12f), new Point(-12f, -10f)}
-    }
+        }
     };
     private static final Polyline[][] POLYLINES = {
-            {
-                    new Polyline(POINTS[0][0])
-            }, {
+        {
+            new Polyline(POINTS[0][0])
+        }, {
             new Polyline(POINTS[1][0]),
             new Polyline(POINTS[1][1]),
             new Polyline(POINTS[1][2])
-    }, {
+        }, {
             new Polyline(POINTS[2][0]),
             new Polyline(POINTS[2][1])
-    }, {
+        }, {
             new Polyline(POINTS[3][0])
-    }
+        }
     };
 
     private byte size;
@@ -74,7 +74,7 @@ class Asteroid extends GameElement {
     }
 
     public void reinitialize(Asteroid parent) {
-        reinitialize((byte) (parent.size - 1));
+        reinitialize((byte)(parent.size - 1));
 
         this.x = parent.x;
         this.y = parent.y;
@@ -103,11 +103,11 @@ class Asteroid extends GameElement {
             x = random.nextFloat() * width;
             y = random.nextFloat() * height;
         } while (
-                x > (width / 3f) &&
-                        x < (width / 3f * 2f) &&
-                        y > (height / 3f) &&
-                        y < (height / 3f * 2f)
-                );
+            x > (width / 3f) &&
+            x < (width / 3f * 2f) &&
+            y > (height / 3f) &&
+            y < (height / 3f * 2f)
+        );
     }
 
     private void initVelocity(Random random) {
@@ -119,7 +119,7 @@ class Asteroid extends GameElement {
     private void initRotation(Random random) {
         rot = random.nextFloat() * 2f * (float) Math.PI;
         vrot = (float) Math.toRadians(
-                MIN_ROTATION_SPEED + random.nextFloat() * (MAX_ROTATION_SPEED - MIN_ROTATION_SPEED)
+            MIN_ROTATION_SPEED + random.nextFloat() * (MAX_ROTATION_SPEED - MIN_ROTATION_SPEED)
         );
     }
 
@@ -140,10 +140,10 @@ class Asteroid extends GameElement {
             return false;
 
         return polyline.intersectsLine(
-                (double) bullet.x(),
-                (double) bullet.y(),
-                (double) bullet.lastX(),
-                (double) bullet.lastY()
+            (double) bullet.x(),
+            (double) bullet.y(),
+            (double) bullet.lastX(),
+            (double) bullet.lastY()
         );
     }
 

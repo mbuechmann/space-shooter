@@ -19,9 +19,9 @@ public class SpaceShooterGame implements Game {
 
         graphics().setSize(WIDTH, HEIGHT);
         ImmediateLayer il = graphics().createImmediateLayer(
-                WIDTH,
-                HEIGHT,
-                gameHandler
+            WIDTH,
+            HEIGHT,
+            gameHandler
         );
         graphics().rootLayer().add(il);
     }
