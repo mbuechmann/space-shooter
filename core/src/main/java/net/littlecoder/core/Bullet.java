@@ -15,7 +15,6 @@ class Bullet extends GameElement {
     private boolean dead;
 
     public Bullet(Ship ship) {
-        super();
         reinitialize(ship);
     }
 

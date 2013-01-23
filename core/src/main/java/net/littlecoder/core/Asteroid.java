@@ -51,12 +51,10 @@ class Asteroid extends GameElement {
     }
 
     public Asteroid(byte size) {
-        super();
         reinitialize(size);
     }
 
     public Asteroid(Asteroid parent) {
-        super();
         reinitialize(parent);
     }
 

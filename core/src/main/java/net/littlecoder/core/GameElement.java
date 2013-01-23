@@ -13,8 +13,6 @@ class GameElement {
     protected float rot = 0f;
     protected float vrot = 0f;
 
-    public GameElement() {}
-
     public static void setBoundaries(int width, int height) {
         GameElement.width = width;
         GameElement.height = height;
