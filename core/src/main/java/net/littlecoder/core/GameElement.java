@@ -1,8 +1,9 @@
 package net.littlecoder.core;
 
-import playn.core.Surface;
-
 class GameElement {
+
+    private static int width = 100;
+    private static int height = 100;
 
     protected float x = 0f;
     protected float y = 0f;
@@ -15,7 +16,20 @@ class GameElement {
     public GameElement() {
     }
 
-    protected void updatePosition(float delta, int width, int height) {
+    public static void setBoundaries(int width, int height) {
+        GameElement.width = width;
+        GameElement.height = height;
+    }
+
+    public static int getWidth() {
+        return width;
+    }
+
+    public static int getHeight() {
+        return height;
+    }
+
+    protected void updatePosition(float delta) {
         x += vx * (delta / 1000f);
         y += vy * (delta / 1000f);
 

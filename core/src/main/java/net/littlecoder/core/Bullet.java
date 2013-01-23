@@ -14,13 +14,8 @@ class Bullet extends GameElement {
     private float age;
     private boolean dead;
 
-    private int width;
-    private int height;
-
-    public Bullet(Ship ship, int width, int height) {
+    public Bullet(Ship ship) {
         super();
-        this.width = width;
-        this.height = height;
         reinitialize(ship);
     }
 
@@ -40,7 +35,7 @@ class Bullet extends GameElement {
     public void update(float delta) {
         lastX = x;
         lastY = y;
-        updatePosition(delta, width, height);
+        updatePosition(delta);
         age += delta;
     }
 

@@ -10,19 +10,14 @@ class BulletManager {
     private ArrayList<Bullet> active;
     private ArrayList<Bullet> inactive;
 
-    private int width;
-    private int height;
-
-    public BulletManager(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public BulletManager() {
         active = new ArrayList<Bullet>();
         inactive = new ArrayList<Bullet>();
     }
 
     public void addBullet(Ship ship) {
         if (inactive.isEmpty())
-            active.add(new Bullet(ship, width, height));
+            active.add(new Bullet(ship));
         else {
             Bullet b = inactive.remove(0);
             b.reinitialize(ship);

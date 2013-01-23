@@ -15,9 +15,6 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
     private static final float TIME_BETWEEN_LEVELS = 3000f;
     private static final float BLINK_INTERVAL = 2000f;
 
-    private int width;
-    private  int height;
-
     private Ship ship;
     private BulletManager bulletManager;
     private AsteroidManager asteroidManager;
@@ -41,15 +38,12 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
 
     private float blinkTime = 0f;
 
-    public GameHandler(int width, int height) {
-        this.width = width;
-        this.height = height;
-
+    public GameHandler() {
         initTexts();
 
-        ship = new Ship(width, height);
-        bulletManager = new BulletManager(width, height);
-        asteroidManager = new AsteroidManager(width, height);
+        ship = new Ship();
+        bulletManager = new BulletManager();
+        asteroidManager = new AsteroidManager();
 
         shipPolyline = Ship.shipPolyline.clone();
 
@@ -101,7 +95,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
             else if (!ship.isDead())
                 shooting = !ship.isDisabled() && true;
             else
-                ship.reinitialize(width, height);
+                ship.reinitialize();
 
         if (event.key() == Key.ESCAPE)
             System.exit(0);

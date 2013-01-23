@@ -10,12 +10,7 @@ class AsteroidManager {
     private ArrayList<Asteroid> active;
     private ArrayList<Asteroid> inactive;
 
-    private int width;
-    private int height;
-
-    public AsteroidManager(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public AsteroidManager() {
         active = new ArrayList<Asteroid>();
         inactive = new ArrayList<Asteroid>();
         SoundPlayer.loadSound("Die");
@@ -23,7 +18,7 @@ class AsteroidManager {
 
     public void initLevel(int level) {
         for (int i = 0; i < level + 2; i++)
-            active.add(new Asteroid(width, height));
+            active.add(new Asteroid());
     }
 
     public void paint(Surface surface) {

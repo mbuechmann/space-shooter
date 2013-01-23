@@ -12,9 +12,6 @@ class Asteroid extends GameElement {
     // time to life for debris (size=0)
     private static float TTL = 1000f;
 
-    private int width;
-    private int height;
-
     private static final Point[][][] POINTS = {
             {
                     {new Point(-0.5f, -0.5f), new Point(-0.5f, 0.5f), new Point(0.5f, 0.5f), new Point(0.5f, -0.5f)}
@@ -49,21 +46,17 @@ class Asteroid extends GameElement {
     private boolean dead;
     private float age;
 
-    public Asteroid(int width, int height) {
-        this(width, height, (byte) 3);
+    public Asteroid() {
+        this((byte) 3);
     }
 
-    public Asteroid(int width, int height, byte size) {
+    public Asteroid(byte size) {
         super();
-        this.width = width;
-        this.height = height;
         reinitialize(size);
     }
 
     public Asteroid(Asteroid parent) {
         super();
-        this.width = parent.width;
-        this.height = parent.height;
         reinitialize(parent);
     }
 
@@ -103,6 +96,9 @@ class Asteroid extends GameElement {
     }
 
     private void initPosition(Random random) {
+        int width = GameElement.getWidth();
+        int height = GameElement.getHeight();
+
         do {
             x = random.nextFloat() * width;
             y = random.nextFloat() * height;
@@ -132,7 +128,7 @@ class Asteroid extends GameElement {
     }
 
     public void update(float delta) {
-        updatePosition(delta, width, height);
+        updatePosition(delta);
         if (size == 0) {
             age += delta;
             dead = age > TTL;

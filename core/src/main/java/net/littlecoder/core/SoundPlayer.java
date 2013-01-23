@@ -5,7 +5,6 @@ import static playn.core.PlayN.*;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 
-import playn.core.Assets;
 import playn.core.Sound;
 
 class SoundPlayer {

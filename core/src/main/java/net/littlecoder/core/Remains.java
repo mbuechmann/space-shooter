@@ -8,15 +8,10 @@ class Remains extends GameElement {
 
     private static float MAX_ROTATION_SPEED = 30f;
 
-    private int width;
-    private int height;
-
     private Line line;
 
-    public Remains(Line line, float x, float y, float vx, float vy, float rot, int width, int height) {
+    public Remains(Line line, float x, float y, float vx, float vy, float rot) {
         super();
-        this.width = width;
-        this.height = height;
         this.line = line;
         this.x = x;
         this.y = y;
@@ -33,7 +28,7 @@ class Remains extends GameElement {
     }
 
     public void update(float delta) {
-        updatePosition(delta, width, height);
+        updatePosition(delta);
     }
 
 }

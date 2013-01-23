@@ -15,9 +15,6 @@ class Ship extends GameElement {
     private static final float ROTATION_SPEED = (float) Math.toRadians(180f);
     private static final float TTD = 3000f;
 
-    private int width;
-    private int height;
-
     private boolean accelerating = false;
     private boolean steeringRight = false;
     private boolean steeringLeft = false;
@@ -42,16 +39,14 @@ class Ship extends GameElement {
     // The remains of the ship when it is destroyed
     private Remains[] remains;
 
-    public Ship(int width, int height) {
-        this.width = width;
-        this.height = height;
-        reinitialize(width, height);
+    public Ship() {
+        reinitialize();
         initSounds();
     }
 
-    public void reinitialize(int width, int height) {
-        x = width / 2f;
-        y = height / 2f;
+    public void reinitialize() {
+        x = GameElement.getWidth() / 2f;
+        y = GameElement.getHeight() / 2f;
         vx = 0f;
         vy = 0f;
         rot = 0f;
@@ -99,7 +94,7 @@ class Ship extends GameElement {
         if (!dying) {
             regardPiloting(delta);
             limitVelocity();
-            updatePosition(delta, width, height);
+            updatePosition(delta);
         } else {
             progressDeath(delta);
             for (Remains r : remains)
@@ -163,10 +158,10 @@ class Ship extends GameElement {
 
     private void initRemains() {
         remains = new Remains[4];
-        remains[0] = new Remains(new Line(shipTop, shipRight), x, y, vx, vy, rot, width, height);
-        remains[1] = new Remains(new Line(shipRight, shipBottom), x, y, vx, vy, rot, width, height);
-        remains[2] = new Remains(new Line(shipBottom, shipLeft), x, y, vx, vy, rot, width, height);
-        remains[3] = new Remains(new Line(shipLeft, shipTop), x, y, vx, vy, rot, width, height);
+        remains[0] = new Remains(new Line(shipTop, shipRight), x, y, vx, vy, rot);
+        remains[1] = new Remains(new Line(shipRight, shipBottom), x, y, vx, vy, rot);
+        remains[2] = new Remains(new Line(shipBottom, shipLeft), x, y, vx, vy, rot);
+        remains[3] = new Remains(new Line(shipLeft, shipTop), x, y, vx, vy, rot);
     }
 
 }
