@@ -21,7 +21,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
 
     private boolean shooting = false;
 
-    private byte lifes = 0;
+    private byte lives = 0;
     private int score = 0;
     private int level = 0;
 
@@ -60,7 +60,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
             bulletManager.paint(surface);
             asteroidManager.paint(surface);
 
-            for (int l = 0; l < lifes; l++)
+            for (int l = 0; l < lives; l++)
                 shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
 
         } else
@@ -126,7 +126,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
 
         if (asteroidManager.isCollidingWith(ship)) {
             ship.die();
-            lifes--;
+            lives--;
         }
     }
 
@@ -212,7 +212,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
     private void initLevel(int level) {
         this.level = level;
         if (level == 1) {
-            lifes = 3;
+            lives = 3;
             score = 0;
         }
 
@@ -231,6 +231,6 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
     }
 
     private boolean isGameOver() {
-        return level == 0 || lifes == 0 && ship.isDead();
+        return level == 0 || lives == 0 && ship.isDead();
     }
 }
