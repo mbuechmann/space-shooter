@@ -1,14 +1,12 @@
 package net.littlecoder.core;
 
-import java.util.Random;
-
 import playn.core.Sound;
 import playn.core.Surface;
 
 class Ship extends GameElement {
 
     // Speed in pixel/second,
-    // accelaeration in pixel/second^2,
+    // acceleration in pixel/second^2,
     // rotation in radians per second
     private static final float MAX_SPEED = 400f;
     private static final float ACCELERATION = 500f;

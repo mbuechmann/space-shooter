@@ -6,8 +6,6 @@ class Point extends Point2D.Float {
 
     private float originalX;
     private float originalY;
-    private float currentX;
-    private float currentY;
 
     public Point(float x, float y) {
         originalX = x;

@@ -1,6 +1,5 @@
 package net.littlecoder.core;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 import playn.core.Surface;
