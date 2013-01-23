@@ -45,7 +45,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
         bulletManager = new BulletManager();
         asteroidManager = new AsteroidManager();
 
-        shipPolyline = Ship.shipPolyline.clone();
+        shipPolyline = Ship.shipPolyline.copy();
 
         keyboard().setListener(this);
     }

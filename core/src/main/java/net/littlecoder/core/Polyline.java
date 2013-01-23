@@ -47,7 +47,7 @@ class Polyline {
         return false;
     }
 
-    public Polyline clone() {
+    public Polyline copy() {
         Point[] clonedPoints = new Point[points.length];
         for (int i = 0; i < points.length; i++)
             clonedPoints[i] = (Point) points[i].clone();

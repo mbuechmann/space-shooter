@@ -90,7 +90,7 @@ class Asteroid extends GameElement {
 
     private void initPolyline(Random random) {
         int r = random.nextInt(POLYLINES[size].length);
-        polyline = POLYLINES[size][r].clone();
+        polyline = POLYLINES[size][r].copy();
     }
 
     private void initPosition(Random random) {
