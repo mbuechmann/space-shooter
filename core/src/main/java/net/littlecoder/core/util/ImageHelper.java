@@ -1,4 +1,4 @@
-package net.littlecoder.core;
+package net.littlecoder.core.util;
 
 import static playn.core.PlayN.*;
 
@@ -7,7 +7,7 @@ import playn.core.Font;
 import playn.core.TextFormat;
 import playn.core.TextLayout;
 
-class ImageHelper {
+public class ImageHelper {
 
     public static CanvasImage createTextImage(
         String text,

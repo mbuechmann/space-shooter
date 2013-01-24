@@ -2,7 +2,7 @@ package net.littlecoder.core;
 
 import static playn.core.PlayN.*;
 
-import static net.littlecoder.core.ImageHelper.*;
+import static net.littlecoder.core.util.ImageHelper.*;
 
 import net.littlecoder.core.game_elements.Ship;
 import playn.core.*;

@@ -1,6 +1,6 @@
 package net.littlecoder.core.game_elements;
 
-import net.littlecoder.core.SoundPlayer;
+import net.littlecoder.core.util.SoundPlayer;
 import playn.core.Surface;
 
 public class Bullet extends GameElement {

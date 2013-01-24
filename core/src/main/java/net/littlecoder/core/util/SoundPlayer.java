@@ -1,4 +1,4 @@
-package net.littlecoder.core;
+package net.littlecoder.core.util;
 
 import static playn.core.PlayN.*;
 

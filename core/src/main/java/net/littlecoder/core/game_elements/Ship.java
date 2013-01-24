@@ -3,9 +3,7 @@ package net.littlecoder.core.game_elements;
 import net.littlecoder.core.Line;
 import net.littlecoder.core.Point;
 import net.littlecoder.core.Polyline;
-import net.littlecoder.core.SoundPlayer;
-import net.littlecoder.core.game_elements.GameElement;
-import net.littlecoder.core.game_elements.Remains;
+import net.littlecoder.core.util.SoundPlayer;
 import playn.core.Sound;
 import playn.core.Surface;
 

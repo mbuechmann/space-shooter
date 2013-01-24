@@ -6,6 +6,7 @@ import java.util.Collections;
 
 import net.littlecoder.core.game_elements.Asteroid;
 import net.littlecoder.core.game_elements.Ship;
+import net.littlecoder.core.util.SoundPlayer;
 import playn.core.Surface;
 
 class AsteroidManager {
