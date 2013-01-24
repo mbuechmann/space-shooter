@@ -1,9 +1,15 @@
-package net.littlecoder.core;
+package net.littlecoder.core.game_elements;
 
+import net.littlecoder.core.Line;
+import net.littlecoder.core.Point;
+import net.littlecoder.core.Polyline;
+import net.littlecoder.core.SoundPlayer;
+import net.littlecoder.core.game_elements.GameElement;
+import net.littlecoder.core.game_elements.Remains;
 import playn.core.Sound;
 import playn.core.Surface;
 
-class Ship extends GameElement {
+public class Ship extends GameElement {
 
     // Speed in pixel/second,
     // acceleration in pixel/second^2,
@@ -63,6 +69,10 @@ class Ship extends GameElement {
 
     public float rot() {
         return rot;
+    }
+
+    public float getY() {
+        return y;
     }
 
     public void paint(Surface surface) {

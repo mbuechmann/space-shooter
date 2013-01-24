@@ -4,7 +4,7 @@ import playn.core.Surface;
 
 import java.awt.geom.Line2D;
 
-class Line extends Line2D.Float {
+public class Line extends Line2D.Float {
 
     private Point p0;
     private Point p1;

@@ -1,6 +1,6 @@
-package net.littlecoder.core;
+package net.littlecoder.core.game_elements;
 
-class GameElement {
+public class GameElement {
 
     private static int width = 100;
     private static int height = 100;

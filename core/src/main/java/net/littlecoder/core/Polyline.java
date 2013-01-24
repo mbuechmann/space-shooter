@@ -2,7 +2,7 @@ package net.littlecoder.core;
 
 import playn.core.Surface;
 
-class Polyline {
+public class Polyline {
 
     private Point[] points;
     private Line[] lines;

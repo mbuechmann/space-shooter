@@ -2,7 +2,7 @@ package net.littlecoder.core;
 
 import java.awt.geom.Point2D;
 
-class Point extends Point2D.Float {
+public class Point extends Point2D.Float {
 
     private float originalX;
     private float originalY;

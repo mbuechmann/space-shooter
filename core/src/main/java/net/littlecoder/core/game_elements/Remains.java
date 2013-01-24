@@ -1,10 +1,12 @@
-package net.littlecoder.core;
+package net.littlecoder.core.game_elements;
 
 import java.util.Random;
 
+import net.littlecoder.core.Line;
+import net.littlecoder.core.game_elements.GameElement;
 import playn.core.Surface;
 
-class Remains extends GameElement {
+public class Remains extends GameElement {
 
     private static float MAX_ROTATION_SPEED = 30f;
 

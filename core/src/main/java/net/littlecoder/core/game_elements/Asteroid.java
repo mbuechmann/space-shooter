@@ -1,10 +1,11 @@
-package net.littlecoder.core;
+package net.littlecoder.core.game_elements;
 
 import java.util.Random;
 
+import net.littlecoder.core.*;
 import playn.core.Surface;
 
-class Asteroid extends GameElement {
+public class Asteroid extends GameElement {
 
     private static final float SPEED = 100f;
     private static final float MIN_ROTATION_SPEED = -90f;

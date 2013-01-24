@@ -4,6 +4,7 @@ import static playn.core.PlayN.*;
 
 import static net.littlecoder.core.ImageHelper.*;
 
+import net.littlecoder.core.game_elements.Ship;
 import playn.core.*;
 
 // TODO: Move rendering of dynamic texts to ImageHelper
@@ -164,7 +165,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
             nextLevelImage.canvas().clear();
             nextLevelImage.canvas().drawText(layout, 0, 0);
             float y = surface.height() / 4f;
-            if (ship.y < surface.height() / 2f)
+            if (ship.getY() < surface.height() / 2f)
                 y += surface.height() / 2f;
             surface.drawImage(
                     nextLevelImage, (surface.width() - layout.width()) / 2f, y

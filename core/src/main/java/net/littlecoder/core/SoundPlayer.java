@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import playn.core.Sound;
 
-class SoundPlayer {
+public class SoundPlayer {
 
     private static HashMap<String, ArrayDeque<Sound>> soundQueues =
         new HashMap<String, ArrayDeque<Sound>>();

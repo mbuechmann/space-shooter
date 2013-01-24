@@ -4,6 +4,8 @@ package net.littlecoder.core;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import net.littlecoder.core.game_elements.Asteroid;
+import net.littlecoder.core.game_elements.Ship;
 import playn.core.Surface;
 
 class AsteroidManager {

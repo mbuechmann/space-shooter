@@ -1,8 +1,9 @@
-package net.littlecoder.core;
+package net.littlecoder.core.game_elements;
 
+import net.littlecoder.core.SoundPlayer;
 import playn.core.Surface;
 
-class Bullet extends GameElement {
+public class Bullet extends GameElement {
 
     // speed in pixels per second, time to live in milliseconds
     private static final float SPEED = 450f;

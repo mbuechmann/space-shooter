@@ -2,6 +2,7 @@ package net.littlecoder.core;
 
 import static playn.core.PlayN.*;
 
+import net.littlecoder.core.game_elements.GameElement;
 import playn.core.Game;
 import playn.core.ImmediateLayer;
 
