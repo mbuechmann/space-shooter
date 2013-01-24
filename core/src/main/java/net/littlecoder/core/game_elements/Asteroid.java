@@ -2,7 +2,8 @@ package net.littlecoder.core.game_elements;
 
 import java.util.Random;
 
-import net.littlecoder.core.*;
+import net.littlecoder.core.game_elements.primitives.Point;
+import net.littlecoder.core.game_elements.primitives.Polyline;
 import net.littlecoder.core.util.SoundPlayer;
 import playn.core.Surface;
 

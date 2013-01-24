@@ -1,4 +1,4 @@
-package net.littlecoder.core;
+package net.littlecoder.core.game_elements.primitives;
 
 import playn.core.Surface;
 

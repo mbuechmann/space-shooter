@@ -2,8 +2,7 @@ package net.littlecoder.core.game_elements;
 
 import java.util.Random;
 
-import net.littlecoder.core.Line;
-import net.littlecoder.core.game_elements.GameElement;
+import net.littlecoder.core.game_elements.primitives.Line;
 import playn.core.Surface;
 
 public class Remains extends GameElement {

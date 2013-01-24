@@ -1,8 +1,8 @@
 package net.littlecoder.core.game_elements;
 
-import net.littlecoder.core.Line;
-import net.littlecoder.core.Point;
-import net.littlecoder.core.Polyline;
+import net.littlecoder.core.game_elements.primitives.Line;
+import net.littlecoder.core.game_elements.primitives.Point;
+import net.littlecoder.core.game_elements.primitives.Polyline;
 import net.littlecoder.core.util.SoundPlayer;
 import playn.core.Sound;
 import playn.core.Surface;

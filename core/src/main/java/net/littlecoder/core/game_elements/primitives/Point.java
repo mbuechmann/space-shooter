@@ -1,4 +1,4 @@
-package net.littlecoder.core;
+package net.littlecoder.core.game_elements.primitives;
 
 import java.awt.geom.Point2D;
 

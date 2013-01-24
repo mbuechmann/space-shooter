@@ -5,6 +5,7 @@ import static playn.core.PlayN.*;
 import static net.littlecoder.core.util.ImageHelper.*;
 
 import net.littlecoder.core.game_elements.Ship;
+import net.littlecoder.core.game_elements.primitives.Polyline;
 import playn.core.*;
 
 // TODO: Move rendering of dynamic texts to ImageHelper
