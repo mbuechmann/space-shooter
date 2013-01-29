@@ -1,5 +1,5 @@
 
-package net.littlecoder.core;
+package net.littlecoder.core.managers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +9,7 @@ import net.littlecoder.core.game_elements.Ship;
 import net.littlecoder.core.util.SoundPlayer;
 import playn.core.Surface;
 
-class AsteroidManager {
+public class AsteroidManager {
 
     private ArrayList<Asteroid> active;
     private ArrayList<Asteroid> inactive;

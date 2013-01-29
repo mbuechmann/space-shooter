@@ -6,6 +6,8 @@ import static net.littlecoder.core.util.ImageHelper.*;
 
 import net.littlecoder.core.game_elements.Ship;
 import net.littlecoder.core.game_elements.primitives.Polyline;
+import net.littlecoder.core.managers.AsteroidManager;
+import net.littlecoder.core.managers.BulletManager;
 import playn.core.*;
 
 // TODO: Move rendering of dynamic texts to ImageHelper

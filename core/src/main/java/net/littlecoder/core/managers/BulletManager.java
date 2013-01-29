@@ -1,4 +1,4 @@
-package net.littlecoder.core;
+package net.littlecoder.core.managers;
 
 import java.util.ArrayList;
 
@@ -7,7 +7,7 @@ import net.littlecoder.core.game_elements.Bullet;
 import net.littlecoder.core.game_elements.Ship;
 import playn.core.Surface;
 
-class BulletManager {
+public class BulletManager {
 
     private ArrayList<Bullet> active;
     private ArrayList<Bullet> inactive;
