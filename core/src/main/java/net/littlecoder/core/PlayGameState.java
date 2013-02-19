@@ -12,7 +12,7 @@ import playn.core.*;
 
 // TODO: Move rendering of dynamic texts to ImageHelper
 // TODO: Move Game Over part to single class
-class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
+class PlayGameState implements GameState, Keyboard.Listener {
 
     private static final float SMALL_FONT_SIZE = 15f;
     private static final float LARGE_FONT_SIZE = 45f;
@@ -42,7 +42,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
 
     private float blinkTime = 0f;
 
-    public GameHandler() {
+    public PlayGameState() {
         initTexts();
 
         ship = new Ship();
@@ -114,8 +114,7 @@ class GameHandler implements Keyboard.Listener, ImmediateLayer.Renderer {
             ship.steerLeft(false);
     }
 
-    public void onKeyTyped(Keyboard.TypedEvent event) {
-    }
+    public void onKeyTyped(Keyboard.TypedEvent event) {}
 
     private void updateBullets(float delta) {
         bulletManager.update(delta);

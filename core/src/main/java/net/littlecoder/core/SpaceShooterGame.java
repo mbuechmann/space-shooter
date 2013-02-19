@@ -11,18 +11,18 @@ public class SpaceShooterGame implements Game {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 800;
 
-    private GameHandler gameHandler;
+    private static GameState currentGameState;
 
     @Override
     public void init() {
         GameElement.setBoundaries(WIDTH, HEIGHT);
         graphics().setSize(WIDTH, HEIGHT);
 
-        gameHandler = new GameHandler();
+        currentGameState = new PlayGameState();
         ImmediateLayer il = graphics().createImmediateLayer(
             WIDTH,
             HEIGHT,
-            gameHandler
+            currentGameState
         );
         graphics().rootLayer().add(il);
     }
@@ -33,7 +33,7 @@ public class SpaceShooterGame implements Game {
 
     @Override
     public void update(float delta) {
-        gameHandler.update(delta);
+        currentGameState.update(delta);
     }
 
     @Override
