@@ -152,7 +152,7 @@ public class Asteroid extends GameElement {
         if (size == 0)
             return false;
 
-        return !dead && !ship.isDisabled() && polyLine.intersectsPolyline(ship.shipPolyLine);
+        return !dead && !ship.isDisabled() && polyLine.intersectsPolyline(Ship.shipPolyLine);
     }
 
     public void die() {
