@@ -5,7 +5,7 @@ import static playn.core.PlayN.*;
 import static net.littlecoder.core.util.ImageHelper.*;
 
 import net.littlecoder.core.game_elements.Ship;
-import net.littlecoder.core.game_elements.primitives.Polyline;
+import net.littlecoder.core.game_elements.primitives.PolyLine;
 import net.littlecoder.core.managers.AsteroidManager;
 import net.littlecoder.core.managers.BulletManager;
 import playn.core.*;
@@ -31,7 +31,7 @@ class PlayGameState extends GameState implements Keyboard.Listener {
     private CanvasImage levelImage;
     private CanvasImage nextLevelImage;
 
-    private Polyline shipPolyline;
+    private PolyLine shipPolyLine;
 
     private float timeToNextLevel = TIME_BETWEEN_LEVELS;
 
@@ -42,7 +42,7 @@ class PlayGameState extends GameState implements Keyboard.Listener {
         bulletManager = new BulletManager();
         asteroidManager = new AsteroidManager();
 
-        shipPolyline = Ship.shipPolyline.copy();
+        shipPolyLine = Ship.shipPolyLine.copy();
 
         keyboard().setListener(this);
 
@@ -59,7 +59,7 @@ class PlayGameState extends GameState implements Keyboard.Listener {
         asteroidManager.paint(surface);
 
         for (int l = 0; l < lives; l++)
-            shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
+            shipPolyLine.transform(0f, 20f + l * 20f, 20f).paint(surface);
 
         paintScore(surface);
         paintLevel(surface);

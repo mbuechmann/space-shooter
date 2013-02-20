@@ -2,12 +2,12 @@ package net.littlecoder.core.game_elements.primitives;
 
 import playn.core.Surface;
 
-public class Polyline {
+public class PolyLine {
 
     private Point[] points;
     private Line[] lines;
 
-    public Polyline(Point[] points) {
+    public PolyLine(Point[] points) {
         this.points = points;
 
         lines = new Line[points.length];
@@ -22,7 +22,7 @@ public class Polyline {
             l.paint(surface);
     }
 
-    public Polyline transform(float angle, float translationX, float translationY) {
+    public PolyLine transform(float angle, float translationX, float translationY) {
         for (Point p : points)
             p.transform(angle, translationX, translationY);
         for (Line l : lines)
@@ -39,19 +39,19 @@ public class Polyline {
         return false;
     }
 
-    public boolean intersectsPolyline(Polyline polyline) {
-        for (Line l : polyline.lines)
+    public boolean intersectsPolyline(PolyLine polyLine) {
+        for (Line l : polyLine.lines)
             if (intersectsLine(l.x1, l.y1, l.x2, l.y2))
                 return true;
 
         return false;
     }
 
-    public Polyline copy() {
+    public PolyLine copy() {
         Point[] clonedPoints = new Point[points.length];
         for (int i = 0; i < points.length; i++)
             clonedPoints[i] = (Point) points[i].clone();
-        return new Polyline(clonedPoints);
+        return new PolyLine(clonedPoints);
     }
 
 }

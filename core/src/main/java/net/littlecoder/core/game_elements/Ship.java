@@ -2,7 +2,7 @@ package net.littlecoder.core.game_elements;
 
 import net.littlecoder.core.game_elements.primitives.Line;
 import net.littlecoder.core.game_elements.primitives.Point;
-import net.littlecoder.core.game_elements.primitives.Polyline;
+import net.littlecoder.core.game_elements.primitives.PolyLine;
 import net.littlecoder.core.util.SoundPlayer;
 import playn.core.Sound;
 import playn.core.Surface;
@@ -29,11 +29,11 @@ public class Ship extends GameElement {
     private static Point shipBottom = new Point(0f, 0);
     private static Point shipLeft = new Point(-5f, 5f);
     private static Point[] shipPoints = {shipTop, shipRight, shipBottom, shipLeft};
-    public static Polyline shipPolyline = new Polyline(shipPoints);
+    public static PolyLine shipPolyLine = new PolyLine(shipPoints);
 
     // The shape of the thruster
     private static Point[] thrusterPoints = {new Point(-3f, 2f), shipBottom, new Point(3f, 2f), new Point(0f, 7f)};
-    private static Polyline thrusterPolyline = new Polyline(thrusterPoints);
+    private static PolyLine thrusterPolyLine = new PolyLine(thrusterPoints);
 
     private Sound engineSound;
     private Sound dieSound;
@@ -76,9 +76,9 @@ public class Ship extends GameElement {
     public void paint(Surface surface) {
         if (!dying) {
             surface.setFillColor(0xFFFFFF);
-            shipPolyline.transform(rot, x, y).paint(surface);
+            shipPolyLine.transform(rot, x, y).paint(surface);
             if (accelerating && !dying)
-                thrusterPolyline.transform(rot, x, y).paint(surface);
+                thrusterPolyLine.transform(rot, x, y).paint(surface);
         } else if (!isDead())
             for (Remains r : remains)
                 r.paint(surface);

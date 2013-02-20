@@ -3,7 +3,7 @@ package net.littlecoder.core.game_elements;
 import java.util.Random;
 
 import net.littlecoder.core.game_elements.primitives.Point;
-import net.littlecoder.core.game_elements.primitives.Polyline;
+import net.littlecoder.core.game_elements.primitives.PolyLine;
 import net.littlecoder.core.util.SoundPlayer;
 import playn.core.Surface;
 
@@ -29,23 +29,23 @@ public class Asteroid extends GameElement {
             {new Point(-18f, 0f), new Point(-15f, 10f), new Point(-3f, 12f), new Point(0f, 20f), new Point(7f, 16f), new Point(15f, 14f), new Point(20f, 0f), new Point(18f, -3f), new Point(15f, -10f), new Point(8f, -12f), new Point(0f, -15f), new Point(-2f, -12f), new Point(-12f, -10f)}
         }
     };
-    private static final Polyline[][] POLYLINES = {
+    private static final PolyLine[][] POLY_LINES = {
         {
-            new Polyline(POINTS[0][0])
+            new PolyLine(POINTS[0][0])
         }, {
-            new Polyline(POINTS[1][0]),
-            new Polyline(POINTS[1][1]),
-            new Polyline(POINTS[1][2])
+            new PolyLine(POINTS[1][0]),
+            new PolyLine(POINTS[1][1]),
+            new PolyLine(POINTS[1][2])
         }, {
-            new Polyline(POINTS[2][0]),
-            new Polyline(POINTS[2][1])
+            new PolyLine(POINTS[2][0]),
+            new PolyLine(POINTS[2][1])
         }, {
-            new Polyline(POINTS[3][0])
+            new PolyLine(POINTS[3][0])
         }
     };
 
     private byte size;
-    private Polyline polyline;
+    private PolyLine polyLine;
     private boolean dead;
     private float age;
 
@@ -92,8 +92,8 @@ public class Asteroid extends GameElement {
     }
 
     private void initPolyline(Random random) {
-        int r = random.nextInt(POLYLINES[size].length);
-        polyline = POLYLINES[size][r].copy();
+        int r = random.nextInt(POLY_LINES[size].length);
+        polyLine = POLY_LINES[size][r].copy();
     }
 
     private void initPosition(Random random) {
@@ -125,7 +125,7 @@ public class Asteroid extends GameElement {
     }
 
     public void paint(Surface surface) {
-        polyline.transform(rot, x, y).paint(surface);
+        polyLine.transform(rot, x, y).paint(surface);
     }
 
     public void update(float delta) {
@@ -140,7 +140,7 @@ public class Asteroid extends GameElement {
         if (size == 0)
             return false;
 
-        return polyline.intersectsLine(
+        return polyLine.intersectsLine(
             (double) bullet.x(),
             (double) bullet.y(),
             (double) bullet.lastX(),
@@ -152,7 +152,7 @@ public class Asteroid extends GameElement {
         if (size == 0)
             return false;
 
-        return !dead && !ship.isDisabled() && polyline.intersectsPolyline(ship.shipPolyline);
+        return !dead && !ship.isDisabled() && polyLine.intersectsPolyline(ship.shipPolyLine);
     }
 
     public void die() {
