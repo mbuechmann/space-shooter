@@ -2,8 +2,18 @@ package net.littlecoder.core;
 
 import playn.core.ImmediateLayer;
 
-public interface GameState extends ImmediateLayer.Renderer {
+public abstract class GameState implements ImmediateLayer.Renderer {
 
-    public void update(float delta);
+    private static SpaceShooterGame game;
+
+    public abstract void update(float delta);
+
+    public static void setGame(SpaceShooterGame game) {
+        GameState.game = game;
+    }
+
+    protected void exitToState(GameState gameState) {
+        game.setCurrentGameState(gameState);
+    }
 
 }

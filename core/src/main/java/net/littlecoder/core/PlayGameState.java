@@ -11,13 +11,10 @@ import net.littlecoder.core.managers.BulletManager;
 import playn.core.*;
 
 // TODO: Move rendering of dynamic texts to ImageHelper
-// TODO: Move Game Over part to single class
-class PlayGameState implements GameState, Keyboard.Listener {
+class PlayGameState extends GameState implements Keyboard.Listener {
 
     private static final float SMALL_FONT_SIZE = 15f;
-    private static final float LARGE_FONT_SIZE = 45f;
     private static final float TIME_BETWEEN_LEVELS = 3000f;
-    private static final float BLINK_INTERVAL = 2000f;
 
     private Ship ship;
     private BulletManager bulletManager;
@@ -25,22 +22,18 @@ class PlayGameState implements GameState, Keyboard.Listener {
 
     private boolean shooting = false;
 
-    private byte lives = 0;
+    private byte lives = 3;
     private int score = 0;
-    private int level = 0;
+    private int level;
 
     private TextFormat smallTextFormat;
     private CanvasImage scoreImage;
     private CanvasImage levelImage;
     private CanvasImage nextLevelImage;
-    private CanvasImage gameOverImage;
-    private CanvasImage pressFireImage;
 
     private Polyline shipPolyline;
 
     private float timeToNextLevel = TIME_BETWEEN_LEVELS;
-
-    private float blinkTime = 0f;
 
     public PlayGameState() {
         initTexts();
@@ -52,37 +45,35 @@ class PlayGameState implements GameState, Keyboard.Listener {
         shipPolyline = Ship.shipPolyline.copy();
 
         keyboard().setListener(this);
+
+        initLevel(1);
     }
 
     @Override
     public void render(Surface surface) {
         surface.clear();
 
-        if (!isGameOver()) {
-            ship.paint(surface);
+        ship.paint(surface);
 
-            bulletManager.paint(surface);
-            asteroidManager.paint(surface);
+        bulletManager.paint(surface);
+        asteroidManager.paint(surface);
 
-            for (int l = 0; l < lives; l++)
-                shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
-
-        } else
-            paintGameOver(surface);
+        for (int l = 0; l < lives; l++)
+            shipPolyline.transform(0f, 20f + l * 20f, 20f).paint(surface);
 
         paintScore(surface);
         paintLevel(surface);
     }
 
     public void update(float delta) {
-        if (!isGameOver()) {
-            ship.update(delta);
-            updateBullets(delta);
-            asteroidManager.update(delta);
-            detectCollisions();
-            advanceLevel(delta);
-        } else
-            blinkTime = (blinkTime + delta) % BLINK_INTERVAL;
+        ship.update(delta);
+        updateBullets(delta);
+        asteroidManager.update(delta);
+        detectCollisions();
+        advanceLevel(delta);
+
+        if (isGameOver())
+            exitToState(new GameOverGameState());
     }
 
     public void onKeyDown(Keyboard.Event event) {
@@ -94,9 +85,7 @@ class PlayGameState implements GameState, Keyboard.Listener {
             ship.steerLeft(true);
 
         if (event.key() == Key.SPACE)
-            if (isGameOver())
-                initLevel(1);
-            else if (!ship.isDead())
+            if (!ship.isDead())
                 shooting = !ship.isDisabled();
             else
                 ship.reinitialize();
@@ -175,41 +164,21 @@ class PlayGameState implements GameState, Keyboard.Listener {
         }
     }
 
-    private void paintGameOver(Surface surface) {
-        surface.drawImage(
-                gameOverImage,
-                (surface.width() - gameOverImage.width()) / 2f,
-                (surface.height() / 3f - gameOverImage.height() / 2f)
-        );
-
-        if (blinkTime < BLINK_INTERVAL / 2f)
-            surface.drawImage(
-                    pressFireImage,
-                    (surface.width() - pressFireImage.width()) / 2f,
-                    (surface.height() / 3f * 2f - pressFireImage.height() / 2f)
-            );
-    }
-
     private void initTexts() {
         Font smallFont = graphics().createFont(
                 "Vector Battle", Font.Style.PLAIN, SMALL_FONT_SIZE
-        );
-        Font largeFont = graphics().createFont(
-                "Vector Battle", Font.Style.BOLD, LARGE_FONT_SIZE
         );
         TextFormat.Alignment a = TextFormat.Alignment.CENTER;
         int c = 0xFFFFFFFF;
 
         smallTextFormat = new TextFormat().
-                withFont(smallFont).
-                withAlignment(a).
-                withTextColor(c);
+            withFont(smallFont).
+            withAlignment(a).
+            withTextColor(c);
 
         levelImage = createTextImage("00", smallFont, a, c);
         scoreImage = createTextImage("00000", smallFont, a, c);
         nextLevelImage = createTextImage("Next Level in\n\n0 Sec", smallFont, a, c);
-        pressFireImage = createTextImage("Press Fire to Start", smallFont, a, c);
-        gameOverImage = createTextImage("Game Over", largeFont, a, c);
     }
 
     private void initLevel(int level) {
@@ -234,6 +203,6 @@ class PlayGameState implements GameState, Keyboard.Listener {
     }
 
     private boolean isGameOver() {
-        return level == 0 || lives == 0 && ship.isDead();
+        return lives == 0 && ship.isDead();
     }
 }
