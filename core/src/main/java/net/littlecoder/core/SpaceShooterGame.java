@@ -23,7 +23,6 @@ public class SpaceShooterGame implements Game {
         GameElement.setBoundaries(WIDTH, HEIGHT);
         graphics().setSize(WIDTH, HEIGHT);
 
-        //setCurrentGameState(new PlayGameState());
         setCurrentGameState(new GameOverGameState());
     }
 
