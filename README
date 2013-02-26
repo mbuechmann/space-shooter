@@ -8,3 +8,14 @@ The sounds have been taken from Logic Café.
 
 The used sounds are found here:
 http://www.logic-cafe.com/Article_View.asp?ID=156&CategoryID=7
+
+
+Open TODOs:
+- The score is not calculated correctly
+- The AsteroidManager just moves Asteroids to the inactive queue but never back
+- the score and level of the last game should be seen in the GameOverGameState (or 0 when there is no last game)
+- transition the units of all GameElements from pixels to absolute screen values (from 0.0 to 1.0)
+
+Nice to haves:
+- implement hiscores
+- implement UFOs
