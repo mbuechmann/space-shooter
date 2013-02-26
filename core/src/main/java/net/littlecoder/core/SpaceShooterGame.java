@@ -11,6 +11,9 @@ public class SpaceShooterGame implements Game {
     private static final int WIDTH = 800;
     private static final int HEIGHT = 800;
 
+    public static final float SMALL_FONT_SIZE = 15f;
+    public static final float LARGE_FONT_SIZE = 45f;
+
     private GameState currentGameState;
     private ImmediateLayer currentLayer;
 

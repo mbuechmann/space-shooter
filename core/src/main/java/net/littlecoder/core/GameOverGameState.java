@@ -8,8 +8,6 @@ import static playn.core.PlayN.keyboard;
 public class GameOverGameState extends GameState implements Keyboard.Listener {
 
     private static final float BLINK_INTERVAL = 2000f;
-    private static final float SMALL_FONT_SIZE = 15f; // Duplicate in PlayGameState
-    private static final float LARGE_FONT_SIZE = 45f;
     private static final String START_TEXT = "Press Fire to Start";
     private static final String GAME_OVER_TEXT = "Game Over";
 
@@ -19,8 +17,8 @@ public class GameOverGameState extends GameState implements Keyboard.Listener {
     private float blinkTime = 0f;
 
     public GameOverGameState() {
-        pressFireImage = new TextImage(SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, START_TEXT).canvasImage();
-        gameOverImage = new TextImage(LARGE_FONT_SIZE, TextFormat.Alignment.CENTER, GAME_OVER_TEXT).canvasImage();
+        pressFireImage = new TextImage(SpaceShooterGame.SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, START_TEXT).canvasImage();
+        gameOverImage = new TextImage(SpaceShooterGame.LARGE_FONT_SIZE, TextFormat.Alignment.CENTER, GAME_OVER_TEXT).canvasImage();
         keyboard().setListener(this);
     }
 

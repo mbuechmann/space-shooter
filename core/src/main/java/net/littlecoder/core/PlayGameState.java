@@ -12,7 +12,6 @@ import playn.core.*;
 // TODO: Move rendering of dynamic texts to ImageHelper
 class PlayGameState extends GameState implements Keyboard.Listener {
 
-    private static final float SMALL_FONT_SIZE = 15f;
     private static final float TIME_BETWEEN_LEVELS = 3000f;
 
     private Ship ship;
@@ -152,9 +151,11 @@ class PlayGameState extends GameState implements Keyboard.Listener {
     }
 
     private void initTexts() {
-        levelImage = new TextImage(SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, "00");
-        scoreImage = new TextImage(SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, "0000");
-        nextLevelImage = new TextImage(SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, "Next Level in\n\n0 Sec");
+        levelImage = new TextImage(SpaceShooterGame.SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, "00");
+        scoreImage = new TextImage(SpaceShooterGame.SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, "0000");
+        nextLevelImage = new TextImage(
+            SpaceShooterGame.SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, "Next Level in\n\n0 Sec"
+        );
     }
 
     private void initLevel(int level) {
