@@ -1,9 +1,8 @@
 package net.littlecoder.core;
 
+import net.littlecoder.core.util.TextImage;
 import playn.core.*;
 
-import static net.littlecoder.core.util.ImageHelper.createTextImage;
-import static playn.core.PlayN.graphics;
 import static playn.core.PlayN.keyboard;
 
 public class GameOverGameState extends GameState implements Keyboard.Listener {
@@ -11,6 +10,8 @@ public class GameOverGameState extends GameState implements Keyboard.Listener {
     private static final float BLINK_INTERVAL = 2000f;
     private static final float SMALL_FONT_SIZE = 15f; // Duplicate in PlayGameState
     private static final float LARGE_FONT_SIZE = 45f;
+    private static final String START_TEXT = "Press Fire to Start";
+    private static final String GAME_OVER_TEXT = "Game Over";
 
     private CanvasImage gameOverImage;
     private CanvasImage pressFireImage;
@@ -18,7 +19,8 @@ public class GameOverGameState extends GameState implements Keyboard.Listener {
     private float blinkTime = 0f;
 
     public GameOverGameState() {
-        initTexts();
+        pressFireImage = new TextImage(SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, START_TEXT).canvasImage();
+        gameOverImage = new TextImage(LARGE_FONT_SIZE, TextFormat.Alignment.CENTER, GAME_OVER_TEXT).canvasImage();
         keyboard().setListener(this);
     }
 
@@ -41,23 +43,6 @@ public class GameOverGameState extends GameState implements Keyboard.Listener {
                 (surface.width() - pressFireImage.width()) / 2f,
                 (surface.height() / 3f * 2f - pressFireImage.height() / 2f)
             );
-    }
-
-    private void initTexts() {
-        // smallFont is duplicated in PlayGameState
-        Font smallFont = graphics().createFont(
-                "Vector Battle", Font.Style.PLAIN, SMALL_FONT_SIZE
-        );
-        Font largeFont = graphics().createFont(
-                "Vector Battle", Font.Style.BOLD, LARGE_FONT_SIZE
-        );
-
-        TextFormat.Alignment a = TextFormat.Alignment.CENTER; // Duplicate in PlayGameState
-        int c = 0xFFFFFFFF; // Duplicate in PlayGameState
-
-        pressFireImage = createTextImage("Press Fire to Start", smallFont, a, c);
-        gameOverImage = createTextImage("Game Over", largeFont, a, c);
-
     }
 
     @Override

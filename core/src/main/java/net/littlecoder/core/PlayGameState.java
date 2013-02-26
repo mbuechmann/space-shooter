@@ -2,12 +2,11 @@ package net.littlecoder.core;
 
 import static playn.core.PlayN.*;
 
-import static net.littlecoder.core.util.ImageHelper.*;
-
 import net.littlecoder.core.game_elements.Ship;
 import net.littlecoder.core.game_elements.primitives.PolyLine;
 import net.littlecoder.core.managers.AsteroidManager;
 import net.littlecoder.core.managers.BulletManager;
+import net.littlecoder.core.util.TextImage;
 import playn.core.*;
 
 // TODO: Move rendering of dynamic texts to ImageHelper
@@ -26,10 +25,9 @@ class PlayGameState extends GameState implements Keyboard.Listener {
     private int score = 0;
     private int level;
 
-    private TextFormat smallTextFormat;
-    private CanvasImage scoreImage;
-    private CanvasImage levelImage;
-    private CanvasImage nextLevelImage;
+    private TextImage scoreImage;
+    private TextImage levelImage;
+    private TextImage nextLevelImage;
 
     private PolyLine shipPolyLine;
 
@@ -133,52 +131,30 @@ class PlayGameState extends GameState implements Keyboard.Listener {
         if (score < 10000)
             scoreText = "0" + scoreText;
 
-        TextLayout layout = graphics().layoutText(scoreText, smallTextFormat);
-
-        scoreImage.canvas().clear();
-        scoreImage.canvas().drawText(layout, 0, 0);
-        surface.drawImage(scoreImage, surface.width() - layout.width() - 10, 10f);
+        scoreImage.updateText(scoreText);
+        surface.drawImage(scoreImage.canvasImage(), surface.width() - scoreImage.canvasImage().width() - 10, 10f);
     }
 
     private void paintLevel(Surface surface) {
-        String text = String.valueOf(level);
-        if (level < 10)
-            text = "0" + text;
-
-        TextLayout layout = graphics().layoutText(text, smallTextFormat);
-        levelImage.canvas().clear();
-        levelImage.canvas().drawText(layout, 0, 0);
-        surface.drawImage(levelImage, surface.width() / 2f - layout.width(), 10f);
+        surface.drawImage(levelImage.canvasImage(), surface.width() / 2f - levelImage.canvasImage().width(), 10f);
 
         if (asteroidManager.isEmpty() && !isGameOver()) {
-            text = "Next Level in\n\n" + (int) Math.ceil(timeToNextLevel / 1000) + " Sec";
-            layout = graphics().layoutText(text, smallTextFormat);
-            nextLevelImage.canvas().clear();
-            nextLevelImage.canvas().drawText(layout, 0, 0);
+            String text = "Next Level in\n\n" + (int) Math.ceil(timeToNextLevel / 1000) + " Sec";
+            nextLevelImage.updateText(text);
+
             float y = surface.height() / 4f;
             if (ship.getY() < surface.height() / 2f)
                 y += surface.height() / 2f;
             surface.drawImage(
-                    nextLevelImage, (surface.width() - layout.width()) / 2f, y
+                nextLevelImage.canvasImage(), (surface.width() - nextLevelImage.canvasImage().width()) / 2f, y
             );
         }
     }
 
     private void initTexts() {
-        Font smallFont = graphics().createFont(
-                "Vector Battle", Font.Style.PLAIN, SMALL_FONT_SIZE
-        );
-        TextFormat.Alignment a = TextFormat.Alignment.CENTER;
-        int c = 0xFFFFFFFF;
-
-        smallTextFormat = new TextFormat().
-            withFont(smallFont).
-            withAlignment(a).
-            withTextColor(c);
-
-        levelImage = createTextImage("00", smallFont, a, c);
-        scoreImage = createTextImage("00000", smallFont, a, c);
-        nextLevelImage = createTextImage("Next Level in\n\n0 Sec", smallFont, a, c);
+        levelImage = new TextImage(SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, "00");
+        scoreImage = new TextImage(SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, "0000");
+        nextLevelImage = new TextImage(SMALL_FONT_SIZE, TextFormat.Alignment.CENTER, "Next Level in\n\n0 Sec");
     }
 
     private void initLevel(int level) {
@@ -187,6 +163,11 @@ class PlayGameState extends GameState implements Keyboard.Listener {
             lives = 3;
             score = 0;
         }
+
+        String text = String.valueOf(level);
+        if (level < 10)
+            text = "0" + text;
+        levelImage.updateText(text);
 
         asteroidManager.initLevel(level);
     }
