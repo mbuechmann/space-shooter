@@ -1,7 +1,10 @@
 package net.littlecoder.core;
 
 import net.littlecoder.core.util.TextImage;
-import playn.core.*;
+import playn.core.CanvasImage;
+import playn.core.Keyboard;
+import playn.core.Surface;
+import playn.core.TextFormat;
 
 import static playn.core.PlayN.keyboard;
 

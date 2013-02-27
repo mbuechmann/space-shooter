@@ -1,13 +1,16 @@
 package net.littlecoder.core;
 
-import static playn.core.PlayN.*;
-
 import net.littlecoder.core.game_elements.Ship;
 import net.littlecoder.core.game_elements.primitives.PolyLine;
 import net.littlecoder.core.managers.AsteroidManager;
 import net.littlecoder.core.managers.BulletManager;
 import net.littlecoder.core.util.TextImage;
-import playn.core.*;
+import playn.core.Key;
+import playn.core.Keyboard;
+import playn.core.Surface;
+import playn.core.TextFormat;
+
+import static playn.core.PlayN.keyboard;
 
 // TODO: Move rendering of dynamic texts to ImageHelper
 class PlayGameState extends GameState implements Keyboard.Listener {
