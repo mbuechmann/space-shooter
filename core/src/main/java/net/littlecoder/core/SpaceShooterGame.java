@@ -3,6 +3,8 @@ package net.littlecoder.core;
 import static playn.core.PlayN.*;
 
 import net.littlecoder.core.game_elements.GameElement;
+import net.littlecoder.core.game_state.GameOverGameState;
+import net.littlecoder.core.game_state.GameState;
 import playn.core.Game;
 import playn.core.ImmediateLayer;
 

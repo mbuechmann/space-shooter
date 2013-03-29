@@ -1,5 +1,6 @@
-package net.littlecoder.core;
+package net.littlecoder.core.game_state;
 
+import net.littlecoder.core.SpaceShooterGame;
 import playn.core.ImmediateLayer;
 
 public abstract class GameState implements ImmediateLayer.Renderer {

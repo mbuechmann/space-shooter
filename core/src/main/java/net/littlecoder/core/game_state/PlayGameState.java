@@ -1,5 +1,6 @@
-package net.littlecoder.core;
+package net.littlecoder.core.game_state;
 
+import net.littlecoder.core.SpaceShooterGame;
 import net.littlecoder.core.game_elements.Ship;
 import net.littlecoder.core.game_elements.primitives.PolyLine;
 import net.littlecoder.core.managers.AsteroidManager;
