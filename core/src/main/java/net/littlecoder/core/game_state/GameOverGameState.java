@@ -1,6 +1,7 @@
 package net.littlecoder.core.game_state;
 
 import net.littlecoder.core.SpaceShooterGame;
+import net.littlecoder.core.game_state.GameState;
 import net.littlecoder.core.util.TextImage;
 import playn.core.CanvasImage;
 import playn.core.Keyboard;
